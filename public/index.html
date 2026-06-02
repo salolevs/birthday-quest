@@ -1,0 +1,777 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Salo's Birthday Quest</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;600;700&display=swap');
+*{margin:0;padding:0;box-sizing:border-box}
+:root{--bg:#1a1c2e;--bg2:#202340;--panel:#252850;--border:#4a4e7a;--text:#e8e6f0;--dim:#7778a0;
+  --gold:#ffd700;--blue:#4fc3f7;--green:#66bb6a;--red:#ef5350;--pink:#f06292;--orange:#ffb74d;--purple:#b388ff;--cyan:#4dd0e1}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh}
+.px{font-family:'Press Start 2P',monospace}
+
+/* ═══ SCREENS ═══ */
+.screen{display:none;min-height:100vh}.screen.active{display:flex;flex-direction:column}
+
+/* ═══ TITLE ═══ */
+#titleScreen{align-items:center;justify-content:center;text-align:center;
+  background:radial-gradient(ellipse at 50% 60%,rgba(79,195,247,.06),transparent 60%),var(--bg);
+  position:relative;padding:2rem}
+.stars{position:absolute;inset:0;overflow:hidden}
+.star{position:absolute;background:#fff;border-radius:50%;animation:tw var(--d) ease-in-out infinite;opacity:0}
+@keyframes tw{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:var(--b);transform:scale(1)}}
+.tc{position:relative;z-index:1}
+.tc .icon{font-size:4.5rem;margin-bottom:1rem;animation:bob 2s ease-in-out infinite}
+@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+.tc h1{font-family:'Press Start 2P',monospace;font-size:clamp(1rem,3.5vw,1.7rem);
+  color:var(--gold);line-height:1.9;text-shadow:0 0 20px rgba(255,215,0,.3),0 3px 0 #997a00}
+.tc .sub{font-family:'Press Start 2P',monospace;font-size:clamp(.45rem,1.2vw,.6rem);
+  color:var(--blue);margin-top:1rem;text-shadow:0 0 12px rgba(79,195,247,.4);line-height:2.2}
+.td{color:var(--dim);font-size:1rem;margin-top:1.5rem;line-height:2}
+.td strong{color:var(--text)}
+.sbtn{margin-top:2.5rem;font-family:'Press Start 2P',monospace;font-size:.65rem;
+  padding:1rem 2.5rem;background:var(--panel);border:3px solid var(--gold);color:var(--gold);
+  cursor:pointer;transition:all .3s;animation:gl 2s ease-in-out infinite}
+@keyframes gl{0%,100%{box-shadow:0 0 8px rgba(255,215,0,.2)}50%{box-shadow:0 0 25px rgba(255,215,0,.4)}}
+.sbtn:hover{background:var(--gold);color:var(--bg);transform:scale(1.05)}
+.blink{animation:blk 1s step-end infinite;font-family:'Press Start 2P',monospace;font-size:.45rem;color:var(--dim);margin-top:1.5rem}
+@keyframes blk{50%{opacity:0}}
+
+/* ═══ NAME INPUT ═══ */
+#nameScreen{align-items:center;justify-content:center;text-align:center;padding:2rem;
+  background:radial-gradient(ellipse at 50% 40%,rgba(79,195,247,.05),transparent 60%),var(--bg)}
+.name-box{max-width:500px;width:100%}
+.name-box .icon{font-size:3.5rem;margin-bottom:1rem}
+.name-input{font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:600;
+  padding:.9rem 1.2rem;width:100%;max-width:350px;background:var(--bg2);
+  border:3px solid var(--border);border-radius:4px;color:var(--text);
+  text-align:center;outline:none;transition:border-color .3s;margin-top:1rem}
+.name-input:focus{border-color:var(--gold);box-shadow:0 0 15px rgba(255,215,0,.15)}
+.name-input::placeholder{color:var(--dim)}
+.name-go{font-family:'Press Start 2P',monospace;font-size:.55rem;padding:.8rem 2rem;
+  background:var(--panel);border:3px solid var(--gold);color:var(--gold);
+  cursor:pointer;transition:all .3s;margin-top:1.2rem}
+.name-go:hover{background:var(--gold);color:var(--bg)}
+.name-scores{font-family:'Press Start 2P',monospace;font-size:.45rem;padding:.6rem 1.5rem;
+  background:transparent;border:2px solid var(--purple);color:var(--purple);
+  cursor:pointer;transition:all .2s;margin-top:.8rem}
+.name-scores:hover{background:var(--purple);color:var(--bg)}
+
+/* ═══ GAME ═══ */
+#gameScreen{position:relative}
+.gw{flex:1;display:flex;flex-direction:column;min-height:100vh;position:relative}
+
+/* Progress dots */
+.pmap{position:absolute;top:0;left:0;right:0;z-index:30;
+  background:rgba(26,28,46,.85);border-bottom:2px solid var(--border);
+  padding:.6rem 1rem;display:flex;align-items:center;justify-content:center;gap:0}
+.pn{position:relative;display:flex;align-items:center}
+.pd{width:10px;height:10px;border-radius:50%;border:2px solid var(--border);background:var(--bg);transition:all .3s;flex-shrink:0}
+.pd.done{background:var(--green);border-color:var(--green)}.pd.cur{background:var(--gold);border-color:var(--gold);animation:dp 1.5s ease-in-out infinite}
+@keyframes dp{0%,100%{box-shadow:0 0 4px rgba(255,215,0,.3)}50%{box-shadow:0 0 12px rgba(255,215,0,.6)}}
+.pl{width:16px;height:2px;background:var(--border);flex-shrink:0}.pl.done{background:var(--green)}
+
+/* Scene */
+.scene{flex:1;position:relative;min-height:450px;overflow:hidden;transition:background 1.2s ease}
+.scene.beach{background:linear-gradient(180deg,#87CEEB 0%,#b0e0f0 40%,#f5deb3 68%,#e8c872 100%)}
+.scene.sunset{background:linear-gradient(180deg,#ff7e5f 0%,#feb47b 30%,#f5deb3 65%,#deb887 100%)}
+.scene.night{background:linear-gradient(180deg,#0f0c29 0%,#1a1c2e 40%,#2d2f52 70%,#252850 100%)}
+.scene.dusk{background:linear-gradient(180deg,#2c3e6b 0%,#f0946c 35%,#f5deb3 65%,#deb887 100%)}
+.scene.morning{background:linear-gradient(180deg,#ffecd2 0%,#fcb69f 20%,#87CEEB 50%,#b0e0f0 70%,#f5deb3 100%)}
+.scene.party{background:linear-gradient(180deg,#1a0a2e 0%,#2d1b4e 30%,#1a1c2e 60%,#252850 100%)}
+
+.ground{position:absolute;bottom:0;left:0;right:0;height:33%;z-index:1}
+.scene.beach .ground,.scene.morning .ground{background:linear-gradient(180deg,#f5deb3,#e8c872)}
+.scene.sunset .ground,.scene.dusk .ground{background:linear-gradient(180deg,#deb887,#c4a265)}
+.scene.night .ground,.scene.party .ground{background:linear-gradient(180deg,#2a2d4a,#1e2040)}
+
+.cel{position:absolute;border-radius:50%;z-index:0;transition:all 1s}
+.cel.sun{width:60px;height:60px;background:radial-gradient(circle,#ffe066,#ffa500);top:12%;right:20%;box-shadow:0 0 40px rgba(255,200,0,.4)}
+.cel.moon{width:50px;height:50px;background:radial-gradient(circle at 35% 35%,#e8e6f0,#c0c0d0);top:10%;right:25%;box-shadow:0 0 30px rgba(200,200,255,.3)}
+.cel.sunrise{width:70px;height:70px;background:radial-gradient(circle,#ffe066,#ff9a56);top:25%;right:15%;box-shadow:0 0 50px rgba(255,180,0,.4)}
+
+.waves{position:absolute;bottom:32%;left:0;right:0;height:20px;z-index:2;overflow:hidden}
+.wave{position:absolute;bottom:0;width:200%;height:20px;
+  background:url("data:image/svg+xml,%3Csvg viewBox='0 0 1440 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,10 Q180,0 360,10 Q540,20 720,10 Q900,0 1080,10 Q1260,20 1440,10' fill='none' stroke='rgba(79,195,247,0.3)' stroke-width='2'/%3E%3C/svg%3E") repeat-x;
+  animation:wm 4s linear infinite}
+@keyframes wm{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* Night stars */
+.sst{position:absolute;top:0;left:0;right:0;bottom:50%;overflow:hidden;opacity:0;transition:opacity 1s}
+.scene.night .sst,.scene.party .sst{opacity:1}
+
+/* ═══ SPRITE ═══ */
+.sw{position:absolute;bottom:18%;z-index:10;transition:left 1.5s ease-in-out,bottom .6s ease;left:10%}
+.sprite{width:48px;display:flex;flex-direction:column;align-items:center}
+.sp-head{width:26px;height:26px;background:#ffd5a0;border-radius:50%;position:relative;border:2px solid #dda070}
+.sp-head::before{content:'';position:absolute;top:-7px;left:-3px;right:-3px;height:15px;background:#4a3728;border-radius:12px 12px 0 0}
+.sp-eyes{position:absolute;top:11px;left:5px;right:5px;display:flex;justify-content:space-between}
+.sp-eye{width:4px;height:4px;background:#333;border-radius:50%}
+.sp-torso{width:30px;height:22px;background:var(--blue);border-radius:4px 4px 0 0;margin-top:-2px}
+.sp-legs{display:flex;gap:4px}.sp-leg{width:11px;height:18px;background:#4a6fa5;border-radius:0 0 3px 3px}
+.walking .sp-leg:first-child{animation:wl .35s ease-in-out infinite alternate}
+.walking .sp-leg:last-child{animation:wr .35s ease-in-out infinite alternate}
+@keyframes wl{0%{transform:rotate(-18deg)}100%{transform:rotate(18deg)}}
+@keyframes wr{0%{transform:rotate(18deg)}100%{transform:rotate(-18deg)}}
+
+/* Splash */
+.splash{position:absolute;bottom:0;left:50%;transform:translateX(-50%);pointer-events:none;opacity:0}
+.splash.go{animation:splashAnim .8s ease-out forwards}
+@keyframes splashAnim{0%{opacity:1;transform:translateX(-50%) scale(.5)}40%{opacity:1;transform:translateX(-50%) scale(1.5)}100%{opacity:0;transform:translateX(-50%) scale(2) translateY(-30px)}}
+.splash-drop{position:absolute;width:6px;height:6px;background:var(--blue);border-radius:50%}
+
+/* Party effects */
+.party-fx{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;transition:opacity .5s}
+.party-fx.on{opacity:1}
+.disco{position:absolute;width:100%;height:100%;
+  background:repeating-conic-gradient(rgba(255,0,100,.06) 0deg,transparent 12deg,rgba(0,200,255,.06) 24deg,transparent 36deg,rgba(255,215,0,.04) 48deg,transparent 60deg);
+  animation:spin 6s linear infinite}
+@keyframes spin{to{transform:rotate(360deg)}}
+.strobe{position:absolute;inset:0;animation:strobe 0.15s ease-in-out infinite;opacity:0}
+@keyframes strobe{0%,100%{opacity:0}50%{opacity:.08}}
+.strobe{background:#fff}
+
+/* Laser beams */
+.lasers{position:absolute;inset:0;overflow:hidden}
+.laser{position:absolute;width:3px;height:200%;top:-50%;opacity:.15;
+  animation:laserSweep var(--sp) ease-in-out infinite alternate}
+.laser:nth-child(1){left:20%;background:var(--pink);--sp:3s;animation-delay:0s;transform:rotate(15deg)}
+.laser:nth-child(2){left:50%;background:var(--blue);--sp:4s;animation-delay:.5s;transform:rotate(-10deg)}
+.laser:nth-child(3){left:75%;background:var(--green);--sp:3.5s;animation-delay:1s;transform:rotate(20deg)}
+.laser:nth-child(4){left:35%;background:var(--purple);--sp:2.8s;animation-delay:.3s;transform:rotate(-18deg)}
+.laser:nth-child(5){left:65%;background:var(--gold);--sp:3.2s;animation-delay:.8s;transform:rotate(12deg)}
+@keyframes laserSweep{0%{transform:rotate(-25deg)}100%{transform:rotate(25deg)}}
+
+/* Confetti */
+.confetti-wrap{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.confetti{position:absolute;width:8px;height:8px;top:-10px;animation:fall var(--fd) linear infinite}
+.confetti:nth-child(odd){border-radius:50%}
+@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(500px) rotate(720deg);opacity:0}}
+
+/* Bouncing emoji */
+.bounce-emojis{position:absolute;inset:0;pointer-events:none;overflow:hidden}
+.bounce-emoji{position:absolute;font-size:1.5rem;animation:floatUp var(--fd) ease-out infinite;opacity:0}
+@keyframes floatUp{0%{opacity:0;transform:translateY(0) scale(.5)}20%{opacity:.8}80%{opacity:.6}100%{opacity:0;transform:translateY(-300px) scale(1.2)}}
+
+/* Bar building */
+.bar-building{position:absolute;bottom:33%;left:50%;transform:translateX(-50%);z-index:4;opacity:0;transition:opacity .5s}
+.bar-building.on{opacity:1}
+.bar-struct{width:240px;height:120px;background:linear-gradient(180deg,#4a2050,#3a1840);border-radius:8px 8px 0 0;position:relative;border:2px solid #6a3080;
+  box-shadow:0 0 40px rgba(180,50,200,.2),inset 0 0 20px rgba(0,0,0,.5)}
+.bar-sign{position:absolute;top:-32px;left:50%;transform:translateX(-50%);
+  font-family:'Press Start 2P',monospace;font-size:.5rem;color:var(--gold);
+  background:linear-gradient(180deg,#3a1040,#2a0830);padding:.5rem 1rem;border:3px solid var(--gold);border-radius:4px;
+  white-space:nowrap;animation:neon 1.5s ease-in-out infinite;text-align:center;line-height:1.6}
+@keyframes neon{0%,100%{text-shadow:0 0 5px rgba(255,215,0,.6),0 0 20px rgba(255,215,0,.3),0 0 40px rgba(255,215,0,.1);box-shadow:0 0 10px rgba(255,215,0,.2)}50%{text-shadow:0 0 15px rgba(255,215,0,1),0 0 30px rgba(255,215,0,.6),0 0 60px rgba(255,215,0,.3);box-shadow:0 0 20px rgba(255,215,0,.4)}}
+.bar-window{position:absolute;width:14px;height:18px;border-radius:2px;
+  animation:barLight .8s ease-in-out infinite alternate}
+@keyframes barLight{0%{background:rgba(255,50,150,.7);box-shadow:0 0 8px rgba(255,50,150,.4)}50%{background:rgba(50,200,255,.7);box-shadow:0 0 8px rgba(50,200,255,.4)}100%{background:rgba(255,215,0,.7);box-shadow:0 0 8px rgba(255,215,0,.4)}}
+.bar-door{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:36px;height:50px;background:linear-gradient(180deg,#2a0830,#1a0520);border-radius:6px 6px 0 0;border:2px solid #6a3080;border-bottom:none;
+  box-shadow:inset 0 0 15px rgba(255,100,200,.2)}
+
+/* Floor glow */
+.floor-glow{position:absolute;bottom:33%;left:0;right:0;height:30px;z-index:2;opacity:0;transition:opacity .5s;
+  background:linear-gradient(180deg,rgba(180,50,200,.15),transparent);
+  animation:floorPulse 2s ease-in-out infinite}
+.floor-glow.on{opacity:1}
+@keyframes floorPulse{0%,100%{opacity:.5}50%{opacity:1}}
+
+/* People silhouettes at bar */
+.crowd{position:absolute;bottom:33%;left:0;right:0;z-index:3;display:flex;justify-content:center;gap:6px;opacity:0;transition:opacity .5s}
+.crowd.on{opacity:1}
+.crowd-person{width:14px;display:flex;flex-direction:column;align-items:center;animation:jump var(--s) ease-in-out infinite}
+@keyframes jump{0%,100%{transform:translateY(0)}50%{transform:translateY(var(--y))}}
+.cp-head{width:10px;height:10px;border-radius:50%;background:var(--color)}
+.cp-body{width:8px;height:16px;border-radius:2px;background:var(--color);margin-top:-1px;opacity:.7}
+.cp-arm{width:10px;height:3px;background:var(--color);opacity:.6;margin-top:-8px;border-radius:2px;
+  animation:armWave var(--s) ease-in-out infinite alternate;transform-origin:center}
+@keyframes armWave{0%{transform:rotate(-30deg)}100%{transform:rotate(30deg)}}
+
+/* Location label */
+.loc{position:absolute;top:50px;left:50%;transform:translateX(-50%);z-index:20;
+  font-family:'Press Start 2P',monospace;font-size:.5rem;color:var(--gold);
+  background:rgba(0,0,0,.65);padding:.5rem 1.2rem;border-radius:4px;border:2px solid var(--gold);
+  text-align:center;line-height:1.8;white-space:nowrap;animation:fs .5s ease-out}
+@keyframes fs{0%{opacity:0;transform:translateX(-50%) translateY(-10px)}100%{opacity:1;transform:translateX(-50%) translateY(0)}}
+
+/* ═══ DIALOG ═══ */
+.dov{position:absolute;bottom:0;left:0;right:0;z-index:50;padding:1rem;display:none}
+.dov.show{display:block;animation:su .4s ease-out}
+@keyframes su{0%{transform:translateY(100%);opacity:0}100%{transform:translateY(0);opacity:1}}
+.dlg{max-width:700px;margin:0 auto;background:rgba(32,35,64,.95);border:3px solid var(--border);
+  border-radius:6px;padding:1.2rem 1.5rem;box-shadow:0 -4px 30px rgba(0,0,0,.5)}
+.dlg-sp{font-family:'Press Start 2P',monospace;font-size:.45rem;color:var(--gold);margin-bottom:.5rem;line-height:1.8}
+.dlg-tx{font-size:.9rem;color:var(--text);line-height:1.7;margin-bottom:1rem}
+.dlg-ch{display:grid;gap:.4rem}
+.dlg-ch.c2{grid-template-columns:1fr 1fr}.dlg-ch.c3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:550px){.dlg-ch.c2,.dlg-ch.c3{grid-template-columns:1fr}}
+.cb{font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;padding:.9rem .6rem;
+  background:var(--bg);border:2px solid var(--border);border-radius:4px;color:var(--text);
+  cursor:pointer;transition:all .2s;text-align:center}
+.cb:hover{border-color:var(--gold);background:rgba(255,215,0,.08);transform:translateY(-2px)}
+.cb.picked{border-color:var(--gold);background:rgba(255,215,0,.15);box-shadow:0 0 10px rgba(255,215,0,.12)}
+.cb .s{display:block;font-size:.72rem;font-weight:400;color:var(--dim);margin-top:.2rem}
+.nb{font-family:'Press Start 2P',monospace;font-size:.45rem;padding:.6rem 1.5rem;
+  background:var(--panel);border:2px solid var(--green);color:var(--green);
+  cursor:pointer;transition:all .2s;margin-top:.8rem;float:right}
+.nb:hover{background:var(--green);color:var(--bg)}
+
+/* ═══ RESULTS ═══ */
+#resultsScreen{padding:2rem 1.5rem;align-items:center}
+.rbox{max-width:700px;width:100%}
+.rtitle{text-align:center;margin-bottom:2rem}
+.rtitle .icon{font-size:3rem;margin-bottom:.5rem}
+.rc{background:var(--bg2);border:2px solid var(--border);border-radius:4px;padding:1.3rem 1.5rem;margin-bottom:.8rem}
+.rq{font-family:'Press Start 2P',monospace;font-size:.45rem;color:var(--blue);margin-bottom:.8rem;line-height:1.8}
+.rbw{margin-bottom:.6rem}
+.rbl{display:flex;justify-content:space-between;margin-bottom:.2rem;font-size:.85rem}
+.rbl .n{color:var(--text);font-weight:600}.rbl .c{color:var(--dim);font-family:'Press Start 2P',monospace;font-size:.4rem;line-height:2.5}
+.rbt{height:20px;background:var(--bg);border:1px solid var(--border);border-radius:3px;overflow:hidden}
+.rbf{height:100%;transition:width .8s ease-out;border-radius:2px}
+.rbf.w{background:linear-gradient(90deg,var(--gold),#ffec80)}.rbf.o{background:var(--border)}
+.wb{font-family:'Press Start 2P',monospace;font-size:.35rem;color:var(--gold);text-shadow:0 0 6px rgba(255,215,0,.5);margin-left:.3rem}
+.bbtn{font-family:'Press Start 2P',monospace;font-size:.5rem;padding:.7rem 1.5rem;
+  background:var(--panel);border:2px solid var(--gold);color:var(--gold);cursor:pointer;transition:all .2s;margin-top:1rem}
+.bbtn:hover{background:var(--gold);color:var(--bg)}
+
+/* Packet / info card */
+.packet{background:var(--bg2);border:2px solid var(--gold);border-radius:6px;
+  padding:1.5rem;margin-bottom:1.2rem;box-shadow:0 0 20px rgba(255,215,0,.08)}
+.packet-title{font-family:'Press Start 2P',monospace;font-size:.5rem;color:var(--gold);
+  margin-bottom:.8rem;line-height:1.8;text-align:center}
+.packet-row{display:flex;gap:.8rem;padding:.5rem 0;border-bottom:1px solid rgba(74,78,122,.5);
+  align-items:flex-start;font-size:.88rem}
+.packet-row:last-child{border-bottom:none}
+.packet-icon{font-size:1.1rem;flex-shrink:0;width:24px;text-align:center}
+.packet-label{color:var(--dim);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
+.packet-val{color:var(--text);font-weight:600}
+.packet-link{color:var(--blue);text-decoration:none;word-break:break-all;font-weight:600;font-size:.82rem}
+.packet-link:hover{text-decoration:underline}
+
+/* Snack input */
+.snack-input{font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:600;
+  padding:.7rem 1rem;width:100%;background:var(--bg);border:2px solid var(--border);
+  border-radius:4px;color:var(--text);outline:none;text-align:center;margin-top:.5rem;
+  grid-column:1/-1}
+.snack-input:focus{border-color:var(--gold);box-shadow:0 0 12px rgba(255,215,0,.15)}
+.snack-input::placeholder{color:var(--dim);font-weight:400}
+
+/* Snack results */
+.snack-list{margin-top:.5rem;padding:.6rem .8rem;background:rgba(255,183,77,.06);
+  border:1px solid var(--border);border-radius:3px}
+.snack-item{font-size:.82rem;color:var(--orange);padding:.2rem 0;line-height:1.5}
+.snack-label{font-family:'Press Start 2P',monospace;font-size:.35rem;color:var(--orange);
+  margin-bottom:.3rem;letter-spacing:.1em}
+
+/* Write-in */
+.writein-wrap{grid-column:1/-1;display:none;margin-top:.3rem}
+.writein-wrap.show{display:block}
+.writein{font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:600;
+  padding:.7rem 1rem;width:100%;background:var(--bg);border:2px solid var(--gold);
+  border-radius:4px;color:var(--text);outline:none;text-align:center}
+.writein::placeholder{color:var(--dim);font-weight:400}
+.writein:focus{box-shadow:0 0 12px rgba(255,215,0,.15)}
+
+/* Write-in results */
+.writein-list{margin-top:.5rem;padding:.6rem .8rem;background:rgba(79,195,247,.06);
+  border:1px solid var(--border);border-radius:3px}
+.writein-item{font-size:.82rem;color:var(--cyan);padding:.2rem 0;line-height:1.5}
+.writein-label{font-family:'Press Start 2P',monospace;font-size:.35rem;color:var(--cyan);
+  margin-bottom:.3rem;letter-spacing:.1em}
+</style>
+</head>
+<body>
+
+<!-- TITLE -->
+<div class="screen active" id="titleScreen">
+  <div class="stars" id="stars"></div>
+  <div class="tc">
+    <div class="icon">&#127754;</div>
+    <h1>JERSEY SHORE</h1>
+    <div class="sub">SALO'S BIRTHDAY &bull; JUNE 2026</div>
+    <div class="td"><strong>June 11 &ndash; 14</strong><br>202 15th Ave, Belmar, NJ</div>
+    <button class="sbtn" onclick="goName()">&#9654; START GAME</button>
+    <div class="blink">PRESS START</div>
+  </div>
+</div>
+
+<!-- NAME INPUT -->
+<div class="screen" id="nameScreen">
+  <div class="name-box" style="margin:auto">
+    <div class="icon" style="font-size:3.5rem;margin-bottom:.5rem">&#127918;</div>
+    <div class="px" style="font-size:.65rem;color:var(--gold);line-height:2">ENTER YOUR NAME</div>
+    <p style="color:var(--dim);font-size:.88rem;margin-top:.5rem">Type your name to begin the quest.</p>
+    <input class="name-input" id="nameInput" placeholder="Your name..." maxlength="30" autocomplete="off">
+    <br>
+    <button class="name-go" id="nameGo" onclick="startGame()">&#9654; BEGIN QUEST</button>
+    <br>
+    <button class="name-scores" onclick="goResults()">&#127942; VIEW SCORES</button>
+  </div>
+</div>
+
+<!-- GAME -->
+<div class="screen" id="gameScreen">
+  <div class="gw">
+    <div class="pmap" id="pmap"></div>
+    <div class="scene beach" id="scene">
+      <div class="sst" id="sst"></div>
+      <div class="cel sun" id="cel"></div>
+      <div class="loc" id="loc">JERSEY SHORE</div>
+      <div class="waves"><div class="wave"></div></div>
+      <div class="ground"></div>
+
+      <!-- Party FX -->
+      <div class="party-fx" id="partyFx">
+        <div class="disco"></div>
+        <div class="strobe"></div>
+        <div class="lasers"><div class="laser"></div><div class="laser"></div><div class="laser"></div><div class="laser"></div><div class="laser"></div></div>
+        <div class="confetti-wrap" id="confettiWrap"></div>
+        <div class="bounce-emojis" id="bounceEmojis"></div>
+      </div>
+      <div class="floor-glow" id="floorGlow"></div>
+
+      <!-- Bar building -->
+      <div class="bar-building" id="barBuilding">
+        <div class="bar-struct">
+          <div class="bar-sign" id="barSign">PARKER HOUSE</div>
+          <div class="bar-window" style="top:15px;left:15px"></div>
+          <div class="bar-window" style="top:15px;left:45px"></div>
+          <div class="bar-window" style="top:15px;right:45px"></div>
+          <div class="bar-window" style="top:15px;right:15px"></div>
+          <div class="bar-window" style="top:50px;left:20px"></div>
+          <div class="bar-window" style="top:50px;right:20px"></div>
+          <div class="bar-door"></div>
+        </div>
+      </div>
+
+      <!-- Crowd -->
+      <div class="crowd" id="crowd"></div>
+
+      <!-- Sprite -->
+      <div class="sw" id="sw">
+        <div class="sprite" id="sprite">
+          <div class="sp-head"><div class="sp-eyes"><div class="sp-eye"></div><div class="sp-eye"></div></div></div>
+          <div class="sp-torso"></div>
+          <div class="sp-legs"><div class="sp-leg"></div><div class="sp-leg"></div></div>
+        </div>
+        <div class="splash" id="splash">
+          <div class="splash-drop" style="top:-10px;left:-8px"></div>
+          <div class="splash-drop" style="top:-15px;left:2px"></div>
+          <div class="splash-drop" style="top:-12px;left:12px"></div>
+          <div class="splash-drop" style="top:-8px;left:-4px"></div>
+          <div class="splash-drop" style="top:-18px;left:6px"></div>
+        </div>
+      </div>
+
+      <!-- Dialog -->
+      <div class="dov" id="dov">
+        <div class="dlg">
+          <div class="dlg-sp" id="dsp"></div>
+          <div class="dlg-tx" id="dtx"></div>
+          <div class="dlg-ch" id="dch"></div>
+          <button class="nb" id="nbtn" onclick="nextStep()" style="display:none">NEXT &#9654;</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- RESULTS -->
+<div class="screen" id="resultsScreen">
+  <div class="rbox">
+    <div class="rtitle">
+      <div class="icon">&#127942;</div>
+      <div class="px" style="font-size:.65rem;color:var(--gold);line-height:2;margin-bottom:.3rem">THE PEOPLE HAVE SPOKEN</div>
+      <div id="rCount" style="color:var(--dim);font-size:.88rem"></div>
+    </div>
+    <div id="rCon"></div>
+    <div style="text-align:center">
+      <button class="bbtn" onclick="goName()">&#127918; PLAY AGAIN</button>
+      <br><button class="bbtn" onclick="goTitle()" style="margin-top:.5rem;border-color:var(--blue);color:var(--blue)">&#9664; TITLE</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const STEPS=[
+  {id:'_welcome',scene:'beach',cel:'sun',loc:'WELCOME',
+   sp:'&#127854; YO!',tx:"Welcome to Salo's Birthday Weekend! We're posted up at 202 15th Ave, Belmar. It's gonna be a movie. Let's figure out your plan for the weekend.",
+   multi:false,cols:'c2',pos:10,
+   opts:[{v:'yes',l:"LET'S GO",s:"&#128293; I'm ready"}]},
+
+  {id:'days',scene:'beach',cel:'sun',loc:'THURSDAY &ndash; SUNDAY',
+   sp:'&#128220; QUEST LOG',tx:"First things first — which days are you coming?",
+   multi:true,cols:'c3',pos:18,
+   opts:[{v:'thursday',l:'Thursday Night',s:'&#127769; Jenkinson\'s'},{v:'friday',l:'Friday',s:'&#9876;&#65039; Main Event'},{v:'saturday',l:'Saturday',s:'&#128128; Final Boss'}]},
+
+  {id:'fridayDay',scene:'beach',cel:'sun',loc:'FRIDAY &bull; DAYTIME',
+   sp:'&#9728;&#65039; FRIDAY MORNING',tx:"The sun is up. The beach is calling. What's the move?",
+   multi:false,cols:'c2',pos:30,splash:'beach',
+   opts:[{v:'beach',l:'Beach Day',s:'&#127754; Jump in the water'},{v:'house',l:'House Hangout',s:'&#127968; Day drinks inside'}]},
+
+  {id:'_parker',scene:'party',cel:'moon',loc:'FRIDAY &bull; 4 PM',
+   sp:'&#127881; YOU ENTER PARKER HOUSE',tx:"The bass is thumping. The crowd is packed. Drinks are flowing. This place is chaos and you love it. You got here before 6 like a smart person. Right?",
+   multi:false,cols:'c2',pos:45,bar:true,
+   opts:[{v:'yes',l:'Obviously',s:'&#128526; Before 6 PM like a pro'},{v:'late',l:'...I was late',s:'&#128553; The line was brutal'}]},
+
+  {id:'dinner',scene:'sunset',cel:'sun',loc:'FRIDAY &bull; DINNER',
+   sp:'&#127860; TIME TO REFUEL',tx:"Parker House was legendary. Now you need food. Real food. Where are we eating?",
+   multi:false,cols:'c3',pos:55,
+   opts:[{v:'delpontes',l:"Del Ponte's",s:'&#127837; Italian'},{v:'marina',l:'Marina Grille',s:'&#127754; Seafood &bull; Waterfront'},{v:'dolcevita',l:'Dolce Vita',s:'&#127815; Italian &bull; BYOB'}]},
+
+  {id:'fridayNight',scene:'night',cel:'moon',loc:'FRIDAY &bull; NIGHT',
+   sp:'&#127769; THE NIGHT BECKONS',tx:"Dinner was incredible. But the night is still young. What's the move?",
+   multi:false,cols:'c2',pos:65,writein:true,
+   opts:[{v:'djais',l:"D'Jais",s:'&#127928; Classic madness'},{v:'bara',l:'Bar A',s:'&#127867; Legendary vibes'},{v:'bed',l:"I'm Done",s:'&#128564; No shame'},{v:'_other',l:'Somewhere Else',s:'&#128221; I have a better idea'}]},
+
+  {id:'brunch',scene:'morning',cel:'sunrise',loc:'SATURDAY &bull; MORNING',
+   sp:'&#9749; SATURDAY MORNING',tx:"You wake up. The sun is aggressive. But brunch exists. Are you in?",
+   multi:false,cols:'c2',pos:72,
+   opts:[{v:'yes',l:'Brunch. Obviously.',s:'&#129480; Eggs, coffee, redemption'},{v:'no',l:'Sleep More',s:'&#128564; I\'ll eat when I eat'}]},
+
+  {id:'saturdayDay',scene:'beach',cel:'sun',loc:'SATURDAY &bull; DAYTIME',
+   sp:'&#9728;&#65039; SATURDAY AFTERNOON',tx:"The crew's rallying. Two options on the table — or pitch your own.",
+   multi:false,cols:'c3',pos:82,writein:true,
+   opts:[{v:'donovans',l:"Donovan's Reef",s:'&#127754; Beach + drinks &bull; worth the drive'},{v:'columns',l:'The Columns',s:'&#127867; Happy hour &bull; close to base'},{v:'_other',l:'Somewhere Else',s:'&#128221; Got a spot in mind'}]},
+
+  {id:'snacks',scene:'beach',cel:'sun',loc:'SNACK REQUEST',
+   sp:'&#127839; ONE MORE THING',tx:"We're stocking the house. Any snack or drink requests? Type it in or skip if you're easy.",
+   multi:false,cols:'c2',pos:86,snackInput:true,
+   opts:[{v:'none',l:'No Preference',s:"&#128077; I'll eat anything"}]},
+
+  {id:'saturdayNight',scene:'night',cel:'moon',loc:'SATURDAY &bull; FINAL BOSS',
+   sp:"&#128128; THE LAST STAND",tx:"This is it. Saturday night. The final boss. All remaining HP. What's the call?",
+   multi:false,cols:'c2',pos:90,writein:true,
+   opts:[{v:'djais',l:"D'Jais",s:'&#128293; Full send'},{v:'bed',l:"I'm Out",s:'&#128564; Respect'},{v:'_other',l:'Somewhere Else',s:'&#128221; Different bar in mind'}]}
+];
+
+const Q_META={
+  days:{l:'Which Days?',o:{thursday:'Thursday',friday:'Friday',saturday:'Saturday'}},
+  fridayDay:{l:'Friday Daytime',o:{beach:'Beach',house:'House'}},
+  dinner:{l:'Friday Dinner',o:{delpontes:"Del Ponte's",marina:'Marina Grille',dolcevita:'Dolce Vita'}},
+  fridayNight:{l:'Friday Night',o:{djais:"D'Jais",bara:'Bar A',bed:"Done"},wi:true},
+  brunch:{l:'Saturday Brunch?',o:{yes:'Brunch',no:'Sleep'}},
+  saturdayDay:{l:'Saturday Daytime',o:{donovans:"Donovan's Reef",columns:'The Columns'},wi:true},
+  saturdayNight:{l:'Saturday Night',o:{djais:"D'Jais",bed:"Done"},wi:true}
+};
+
+let currentUser=null,stepIdx=0,userVote={},votes={};
+const API='/api/votes';
+
+async function load(){
+  try{const r=await fetch(API);if(r.ok)votes=await r.json()}
+  catch(e){try{const s=localStorage.getItem('bq3');if(s)votes=JSON.parse(s)}catch(e2){votes={}}}
+}
+
+async function save(){
+  try{await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:currentUser,vote:votes[currentUser]})})}catch(e){}
+  try{localStorage.setItem('bq3',JSON.stringify(votes))}catch(e){}
+}
+
+// Stars
+function mkStars(el,n){for(let i=0;i<n;i++){const s=document.createElement('div');s.className='star';
+  s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
+  s.style.setProperty('--d',(2+Math.random()*4)+'s');s.style.setProperty('--b',.3+Math.random()*.7);
+  s.style.animationDelay=Math.random()*4+'s';s.style.width=s.style.height=(1+Math.random()*2.5)+'px';el.appendChild(s)}}
+mkStars(document.getElementById('stars'),80);
+mkStars(document.getElementById('sst'),40);
+
+// Crowd — way more people, jumping, waving arms
+(function(){const c=document.getElementById('crowd');
+  const colors=['#f06292','#4fc3f7','#ffb74d','#b388ff','#66bb6a','#4dd0e1','#ef5350','#ffd700','#ff8a65','#81c784','#ce93d8','#90caf9','#fff176','#f48fb1','#80deea','#a5d6a7'];
+  for(let i=0;i<20;i++){const p=document.createElement('div');p.className='crowd-person';
+    p.style.setProperty('--s',(.6+Math.random()*1)+'s');
+    p.style.setProperty('--y',(-4-Math.random()*10)+'px');
+    p.style.setProperty('--color',colors[i%colors.length]);
+    p.style.animationDelay=(Math.random()*1)+'s';
+    p.innerHTML='<div class="cp-head"></div><div class="cp-arm"></div><div class="cp-body"></div>';c.appendChild(p)}})();
+
+// Confetti particles
+(function(){const w=document.getElementById('confettiWrap');
+  const colors=['#f06292','#4fc3f7','#ffb74d','#b388ff','#66bb6a','#ffd700','#ef5350','#4dd0e1'];
+  for(let i=0;i<30;i++){const c=document.createElement('div');c.className='confetti';
+    c.style.left=Math.random()*100+'%';c.style.background=colors[i%colors.length];
+    c.style.setProperty('--fd',(2+Math.random()*3)+'s');
+    c.style.animationDelay=Math.random()*4+'s';
+    c.style.width=(4+Math.random()*6)+'px';c.style.height=(4+Math.random()*6)+'px';
+    w.appendChild(c)}})();
+
+// Floating party emojis
+(function(){const w=document.getElementById('bounceEmojis');
+  const emojis=['&#127881;','&#127867;','&#127870;','&#128293;','&#129304;','&#127918;','&#127775;','&#128156;','&#127880;','&#128171;','&#127942;','&#9889;'];
+  for(let i=0;i<10;i++){const e=document.createElement('div');e.className='bounce-emoji';
+    e.innerHTML=emojis[i%emojis.length];
+    e.style.left=Math.random()*90+'%';e.style.bottom=(5+Math.random()*20)+'%';
+    e.style.setProperty('--fd',(3+Math.random()*4)+'s');
+    e.style.animationDelay=Math.random()*5+'s';
+    e.style.fontSize=(1+Math.random()*1.5)+'rem';
+    w.appendChild(e)}})();
+
+// Screens
+function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
+function goTitle(){show('titleScreen')}
+function goName(){show('nameScreen');document.getElementById('nameInput').value='';
+  setTimeout(()=>document.getElementById('nameInput').focus(),300)}
+async function goResults(){show('resultsScreen');await load();renderResults()}
+
+// Name enter key
+document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')startGame()});
+
+async function startGame(){
+  const name=document.getElementById('nameInput').value.trim();
+  if(!name)return;
+  currentUser=name;stepIdx=0;userVote={};
+  await load();
+  if(votes[currentUser])userVote={...votes[currentUser]};
+  show('gameScreen');
+  // Reset visuals
+  document.getElementById('barBuilding').classList.remove('on');
+  document.getElementById('partyFx').classList.remove('on');
+  document.getElementById('crowd').classList.remove('on');
+  document.getElementById('floorGlow').classList.remove('on');
+  renderMap();playStep();
+}
+
+function renderMap(){
+  const m=document.getElementById('pmap');m.innerHTML='';
+  STEPS.forEach((s,i)=>{
+    if(i>0){const l=document.createElement('div');l.className='pl'+(i<stepIdx?' done':'');m.appendChild(l)}
+    const n=document.createElement('div');n.className='pn';
+    const d=document.createElement('div');d.className='pd'+(i<stepIdx?' done':'')+(i===stepIdx?' cur':'');
+    n.appendChild(d);m.appendChild(n);
+  });
+}
+
+function playStep(){
+  if(stepIdx>=STEPS.length){finishGame();return}
+  const step=STEPS[stepIdx];
+  const scene=document.getElementById('scene');
+  const sw=document.getElementById('sw');
+  const cel=document.getElementById('cel');
+  const dov=document.getElementById('dov');
+  const loc=document.getElementById('loc');
+
+  // Scene
+  scene.className='scene '+step.scene;
+  cel.className='cel '+step.cel;
+  loc.innerHTML=step.loc;
+
+  // Bar
+  const bar=document.getElementById('barBuilding');
+  const pfx=document.getElementById('partyFx');
+  const crowd=document.getElementById('crowd');
+  const fg=document.getElementById('floorGlow');
+  if(step.bar){bar.classList.add('on');pfx.classList.add('on');crowd.classList.add('on');fg.classList.add('on');
+    document.getElementById('barSign').textContent='PARKER HOUSE';
+  }else{bar.classList.remove('on');pfx.classList.remove('on');crowd.classList.remove('on');fg.classList.remove('on')}
+
+  // Walk
+  dov.classList.remove('show');
+  sw.classList.add('walking');
+  sw.style.bottom='18%';
+  sw.style.left=step.pos+'%';
+
+  setTimeout(()=>{
+    sw.classList.remove('walking');
+    showDialog(step);
+  },1600);
+  renderMap();
+}
+
+function showDialog(step){
+  document.getElementById('dsp').innerHTML=step.sp;
+  document.getElementById('dtx').textContent=step.tx;
+  const c=document.getElementById('dch');
+  c.className='dlg-ch '+step.cols;c.innerHTML='';
+
+  // Write-in container
+  let wiWrap=null,wiInput=null;
+
+  step.opts.forEach(opt=>{
+    const b=document.createElement('button');b.className='cb';
+    b.innerHTML=opt.l+'<span class="s">'+opt.s+'</span>';
+    if(step.multi){
+      if(userVote[step.id]&&userVote[step.id].includes(opt.v))b.classList.add('picked');
+      b.onclick=()=>{b.classList.toggle('picked');showNb();
+        if(step.splash&&opt.v==='beach'&&b.classList.contains('picked'))doSplash()};
+    }else{
+      const isOther=opt.v==='_other';
+      const curVal=userVote[step.id];
+      // If current value is a custom write-in, highlight "other"
+      if(isOther&&curVal&&curVal.startsWith('custom:'))b.classList.add('picked');
+      else if(curVal===opt.v)b.classList.add('picked');
+      b.onclick=()=>{
+        c.querySelectorAll('.cb').forEach(x=>x.classList.remove('picked'));
+        b.classList.add('picked');
+        if(isOther&&wiWrap){
+          wiWrap.classList.add('show');wiInput.focus();
+          userVote[step.id]='custom:';
+        }else{
+          if(wiWrap)wiWrap.classList.remove('show');
+          userVote[step.id]=opt.v;
+        }
+        showNb();
+        if(step.splash&&opt.v==='beach')doSplash();
+      };
+    }
+    c.appendChild(b);
+  });
+
+  // Snack text input
+  if(step.snackInput){
+    const si=document.createElement('input');si.className='snack-input';
+    si.placeholder='e.g. White Claws, Doritos, hummus...';si.maxLength=80;si.autocomplete='off';
+    if(userVote.snacks&&userVote.snacks!=='none')si.value=userVote.snacks;
+    si.oninput=()=>{userVote.snacks=si.value.trim()||'none';showNb()};
+    si.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();showNb()}});
+    c.appendChild(si);
+  }
+
+  // Add write-in input if step supports it
+  if(step.writein){
+    wiWrap=document.createElement('div');wiWrap.className='writein-wrap';
+    wiInput=document.createElement('input');wiInput.className='writein';
+    wiInput.placeholder='Type a bar or spot...';wiInput.maxLength=40;
+    wiInput.autocomplete='off';
+    // Prefill if custom
+    const curVal=userVote[step.id];
+    if(curVal&&curVal.startsWith('custom:')){
+      wiWrap.classList.add('show');
+      wiInput.value=curVal.replace('custom:','');
+    }
+    wiInput.oninput=()=>{userVote[step.id]='custom:'+wiInput.value.trim();showNb()};
+    wiWrap.appendChild(wiInput);c.appendChild(wiWrap);
+  }
+
+  document.getElementById('nbtn').style.display='none';
+  document.getElementById('dov').classList.add('show');
+  // Auto show next if prefilled
+  if(step.multi&&userVote[step.id]&&userVote[step.id].length)showNb();
+  if(!step.multi&&userVote[step.id])showNb();
+}
+
+function showNb(){document.getElementById('nbtn').style.display='inline-block'}
+
+function doSplash(){
+  const sw=document.getElementById('sw');
+  const sp=document.getElementById('splash');
+  // Jump
+  sw.style.bottom='28%';
+  sp.classList.remove('go');
+  void sp.offsetWidth;
+  setTimeout(()=>{sw.style.bottom='18%';sp.classList.add('go')},500);
+}
+
+function nextStep(){
+  const step=STEPS[stepIdx];
+  if(step.multi){
+    const picks=[];
+    document.querySelectorAll('#dch .cb.picked').forEach(b=>{
+      const opt=step.opts.find(o=>b.innerHTML.includes(o.l));
+      if(opt)picks.push(opt.v);
+    });
+    userVote[step.id]=picks;
+  }
+  // Skip storing _parker in results key (it's just for fun)
+  stepIdx++;playStep();
+}
+
+async function finishGame(){
+  // Clean up internal-only keys
+  const clean={...userVote};delete clean._parker;delete clean._welcome;
+  votes[currentUser]=clean;await save();
+
+  const scene=document.getElementById('scene');scene.className='scene dusk';
+  document.getElementById('cel').className='cel sun';
+  document.getElementById('loc').innerHTML='&#127942; QUEST COMPLETE!';
+  document.getElementById('barBuilding').classList.remove('on');
+  document.getElementById('partyFx').classList.remove('on');
+  document.getElementById('crowd').classList.remove('on');
+  document.getElementById('floorGlow').classList.remove('on');
+
+  const sw=document.getElementById('sw');sw.classList.remove('walking');sw.style.left='45%';
+
+  document.getElementById('dsp').innerHTML='&#127942; YOU\'RE ALL SET, '+currentUser.toUpperCase()+'!';
+  document.getElementById('dtx').innerHTML='Your choices are locked in. Here\'s your info packet for the weekend:';
+  const c=document.getElementById('dch');c.className='dlg-ch';c.style.gridTemplateColumns='1fr';c.innerHTML='';
+  document.getElementById('nbtn').style.display='none';
+
+  // Info packet
+  const pkt=document.createElement('div');pkt.className='packet';
+  pkt.innerHTML=`
+    <div class="packet-title">&#128230; YOUR WEEKEND PACKET</div>
+    <div class="packet-row"><span class="packet-icon">&#127968;</span><div><div class="packet-label">The House</div><div class="packet-val">202 15th Avenue, Belmar, NJ 07719</div></div></div>
+    <div class="packet-row"><span class="packet-icon">&#128279;</span><div><div class="packet-label">Airbnb Listing</div><a class="packet-link" href="https://www.airbnb.com/rooms/1392744599884075499" target="_blank">View the Airbnb</a></div></div>
+    <div class="packet-row"><span class="packet-icon">&#128197;</span><div><div class="packet-label">Dates</div><div class="packet-val">June 11 – 14, 2026 (Thu – Sun)</div></div></div>
+    <div class="packet-row"><span class="packet-icon">&#128205;</span><div><div class="packet-label">Town</div><div class="packet-val">Belmar, NJ — right in the sweet spot</div></div></div>
+    <div class="packet-row"><span class="packet-icon">&#9888;&#65039;</span><div><div class="packet-label">Key Rule</div><div class="packet-val">Parker House BEFORE 6 PM Friday. Non-negotiable.</div></div></div>
+  `;
+  c.appendChild(pkt);
+
+  const btnWrap=document.createElement('div');btnWrap.style.display='grid';btnWrap.style.gridTemplateColumns='1fr 1fr';btnWrap.style.gap='.4rem';
+  const v=document.createElement('button');v.className='cb';v.style.borderColor='var(--gold)';v.style.color='var(--gold)';
+  v.innerHTML='&#127942; View Scores';v.onclick=goResults;btnWrap.appendChild(v);
+  const a=document.createElement('button');a.className='cb';a.style.borderColor='var(--blue)';a.style.color='var(--blue)';
+  a.innerHTML='&#127918; Play Again';a.onclick=goName;btnWrap.appendChild(a);
+  c.appendChild(btnWrap);
+
+  document.getElementById('dov').classList.add('show');renderMap();
+}
+
+// Results (anonymous)
+function renderResults(){
+  load();const voters=Object.keys(votes);const n=voters.length;
+  document.getElementById('rCount').textContent=n===0?'No votes yet.':n+' player'+(n!==1?'s':'')+' voted so far';
+  const con=document.getElementById('rCon');
+  if(!n){con.innerHTML='<p style="color:var(--dim);text-align:center;padding:2rem">Waiting for players...</p>';return}
+
+  let h='';
+  Object.entries(Q_META).forEach(([key,q])=>{
+    h+='<div class="rc"><div class="rq">'+q.l+'</div>';
+    const tallies={};Object.keys(q.o).forEach(k=>{tallies[k]=0});
+    const writeIns=[];
+    const isMulti=key==='days';
+    voters.forEach(name=>{const v=votes[name];if(!v)return;
+      if(isMulti){(v[key]||[]).forEach(val=>{if(tallies[val]!==undefined)tallies[val]++})}
+      else{
+        const val=v[key];
+        if(val&&val.startsWith('custom:')){
+          const custom=val.replace('custom:','').trim();
+          if(custom)writeIns.push(custom);
+        }else if(val&&tallies[val]!==undefined){tallies[val]++}
+      }});
+    const mx=Math.max(...Object.values(tallies),1);
+    const sorted=Object.entries(tallies).sort((a,b)=>b[1]-a[1]);
+    const top=sorted[0][1];
+    sorted.forEach(([k,cnt])=>{
+      const pct=mx>0?(cnt/mx)*100:0;const isW=cnt===top&&cnt>0;
+      h+=`<div class="rbw"><div class="rbl"><span class="n">${q.o[k]}${isW?' <span class="wb">&#127942;</span>':''}</span><span class="c">${cnt} vote${cnt!==1?'s':''}</span></div>
+        <div class="rbt"><div class="rbf ${isW?'w':'o'}" style="width:${Math.max(pct,3)}%"></div></div></div>`;
+    });
+    if(writeIns.length>0){
+      h+='<div class="writein-list"><div class="writein-label">SUGGESTIONS</div>';
+      writeIns.forEach(w=>{h+='<div class="writein-item">&#128172; '+w+'</div>'});
+      h+='</div>';
+    }
+    h+='</div>';
+  });
+  // Snack requests section
+  const snackReqs=[];
+  voters.forEach(name=>{const v=votes[name];if(v&&v.snacks&&v.snacks!=='none')snackReqs.push(v.snacks)});
+  if(snackReqs.length>0){
+    h+='<div class="rc"><div class="rq">Snack &amp; Drink Requests</div>';
+    h+='<div class="snack-list"><div class="snack-label">REQUESTS</div>';
+    snackReqs.forEach(s=>{h+='<div class="snack-item">&#127839; '+s+'</div>'});
+    h+='</div></div>';
+  }
+
+  con.innerHTML=h;
+  requestAnimationFrame(()=>{document.querySelectorAll('.rbf').forEach(b=>{const w=b.style.width;b.style.width='0%';requestAnimationFrame(()=>{b.style.width=w})})});
+}
+load();
+</script>
+</body>
+</html>
