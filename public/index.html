@@ -3,448 +3,466 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Salo's Birthday Quest</title>
+<title>Salo's Birthday Quest 🌊</title>
 <style>
 @import url('https://fonts.googleapis.com/css2?family=Press+Start+2P&family=Outfit:wght@400;600;700&display=swap');
 *{margin:0;padding:0;box-sizing:border-box}
-:root{--bg:#1a1c2e;--bg2:#202340;--panel:#252850;--border:#4a4e7a;--text:#e8e6f0;--dim:#7778a0;
-  --gold:#ffd700;--blue:#4fc3f7;--green:#66bb6a;--red:#ef5350;--pink:#f06292;--orange:#ffb74d;--purple:#b388ff;--cyan:#4dd0e1}
-body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow-x:hidden;min-height:100vh}
+:root{--bg:#0f0e1a;--bg2:#1a1930;--panel:#222045;--border:#3a3870;--text:#eee8ff;--dim:#7775a0;
+  --gold:#ffd700;--blue:#4fc3f7;--green:#66bb6a;--red:#ef5350;--pink:#f06292;
+  --orange:#ffb74d;--purple:#b388ff;--cyan:#4dd0e1;--coral:#ff6b6b}
+body{font-family:'Outfit',sans-serif;background:var(--bg);color:var(--text);overflow:hidden;height:100vh;height:100dvh}
 .px{font-family:'Press Start 2P',monospace}
 
 /* ═══ SCREENS ═══ */
-.screen{display:none;min-height:100vh}.screen.active{display:flex;flex-direction:column}
+.screen{display:none;height:100vh;height:100dvh;flex-direction:column}.screen.active{display:flex}
 
-/* ═══ TITLE ═══ */
-#titleScreen{align-items:center;justify-content:center;text-align:center;
-  background:radial-gradient(ellipse at 50% 60%,rgba(79,195,247,.06),transparent 60%),var(--bg);
-  position:relative;padding:2rem}
-.stars{position:absolute;inset:0;overflow:hidden}
-.star{position:absolute;background:#fff;border-radius:50%;animation:tw var(--d) ease-in-out infinite;opacity:0}
-@keyframes tw{0%,100%{opacity:0;transform:scale(.5)}50%{opacity:var(--b);transform:scale(1)}}
-.tc{position:relative;z-index:1}
-.tc .icon{font-size:4.5rem;margin-bottom:1rem;animation:bob 2s ease-in-out infinite}
-@keyframes bob{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
-.tc h1{font-family:'Press Start 2P',monospace;font-size:clamp(1rem,3.5vw,1.7rem);
-  color:var(--gold);line-height:1.9;text-shadow:0 0 20px rgba(255,215,0,.3),0 3px 0 #997a00}
-.tc .sub{font-family:'Press Start 2P',monospace;font-size:clamp(.45rem,1.2vw,.6rem);
-  color:var(--blue);margin-top:1rem;text-shadow:0 0 12px rgba(79,195,247,.4);line-height:2.2}
-.td{color:var(--dim);font-size:1rem;margin-top:1.5rem;line-height:2}
-.td strong{color:var(--text)}
-.sbtn{margin-top:2.5rem;font-family:'Press Start 2P',monospace;font-size:.65rem;
-  padding:1rem 2.5rem;background:var(--panel);border:3px solid var(--gold);color:var(--gold);
-  cursor:pointer;transition:all .3s;animation:gl 2s ease-in-out infinite}
-@keyframes gl{0%,100%{box-shadow:0 0 8px rgba(255,215,0,.2)}50%{box-shadow:0 0 25px rgba(255,215,0,.4)}}
-.sbtn:hover{background:var(--gold);color:var(--bg);transform:scale(1.05)}
-.blink{animation:blk 1s step-end infinite;font-family:'Press Start 2P',monospace;font-size:.45rem;color:var(--dim);margin-top:1.5rem}
+/* ═══ TITLE SCREEN ═══ */
+#titleScreen{position:relative;overflow:hidden}
+.title-scene{flex:1;position:relative;overflow:hidden;
+  background:linear-gradient(180deg,#87CEEB 0%,#b0e0f0 50%,#4a7c10 68%,#3a6a0a 70%,#555 70%,#555 100%)}
+.road-line{position:absolute;bottom:15%;left:0;width:200%;height:3px;
+  background:repeating-linear-gradient(90deg,var(--gold) 0 20px,transparent 20px 40px);
+  animation:lineScroll .6s linear infinite}
+@keyframes lineScroll{to{transform:translateX(-40px)}}
+.car{position:absolute;bottom:18%;left:30%;z-index:5;animation:carBounce .35s ease-in-out infinite}
+.car-body{width:72px;height:26px;background:var(--coral);border-radius:5px;position:relative}
+.car-top{position:absolute;top:-16px;left:14px;width:38px;height:18px;background:var(--coral);border-radius:7px 7px 0 0}
+.car-window{position:absolute;top:-12px;left:18px;width:30px;height:12px;background:rgba(135,206,235,.85);border-radius:4px 4px 0 0}
+.car-wheel{width:13px;height:13px;background:#333;border-radius:50%;position:absolute;bottom:-6px;border:2px solid #666}
+.car-wheel.cw-f{left:8px}.car-wheel.cw-b{right:8px}
+.car-exhaust{position:absolute;left:-8px;bottom:2px;font-size:.6rem;animation:puff .4s ease-out infinite;opacity:.5}
+@keyframes carBounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-5px)}}
+@keyframes puff{0%{opacity:.6;transform:translateX(0) scale(1)}100%{opacity:0;transform:translateX(-15px) scale(1.5)}}
+.road-sign{position:absolute;z-index:3;animation:signPass 5s linear infinite}
+.road-sign span{font-family:'Press Start 2P',monospace;font-size:.35rem;color:#fff;
+  background:#2a7c3f;padding:3px 7px;border-radius:2px;white-space:nowrap;display:block}
+.road-sign .post{width:3px;height:20px;background:#666;margin:0 auto}
+.rs-1{bottom:38%;animation-delay:0s}.rs-2{bottom:42%;animation-delay:2s}.rs-3{bottom:36%;animation-delay:3.8s}
+@keyframes signPass{0%{right:-100px}100%{right:calc(100% + 100px)}}
+.palm{position:absolute;bottom:30%;font-size:2rem;animation:signPass 7s linear infinite}
+.palm-1{animation-delay:1s}.palm-2{animation-delay:4s}
+.title-ui{background:var(--bg);padding:1.5rem;text-align:center;position:relative;z-index:5}
+.title-ui h1{font-family:'Press Start 2P',monospace;font-size:clamp(1.1rem,4vw,1.8rem);
+  color:var(--gold);line-height:1.8;text-shadow:0 0 20px rgba(255,215,0,.3),0 3px 0 #997a00}
+.title-sub{font-family:'Press Start 2P',monospace;font-size:clamp(.4rem,1.2vw,.55rem);
+  color:var(--blue);margin-top:.6rem;text-shadow:0 0 10px rgba(79,195,247,.4);line-height:2}
+.title-detail{color:var(--dim);font-size:.85rem;margin-top:.8rem;line-height:1.8}
+.title-detail strong{color:var(--text)}
+.start-btn{margin-top:1rem;font-family:'Press Start 2P',monospace;font-size:.6rem;
+  padding:.9rem 2rem;background:var(--panel);border:3px solid var(--gold);color:var(--gold);
+  cursor:pointer;transition:all .3s;animation:btnGlow 2s ease-in-out infinite}
+@keyframes btnGlow{0%,100%{box-shadow:0 0 8px rgba(255,215,0,.2)}50%{box-shadow:0 0 25px rgba(255,215,0,.4)}}
+.start-btn:hover{background:var(--gold);color:var(--bg);transform:scale(1.05)}
+.blink{animation:blk 1s step-end infinite;font-family:'Press Start 2P',monospace;font-size:.4rem;color:var(--dim);margin-top:.8rem}
 @keyframes blk{50%{opacity:0}}
 
-/* ═══ NAME INPUT ═══ */
+/* ═══ NAME SCREEN ═══ */
 #nameScreen{align-items:center;justify-content:center;text-align:center;padding:2rem;
   background:radial-gradient(ellipse at 50% 40%,rgba(79,195,247,.05),transparent 60%),var(--bg)}
 .name-box{max-width:500px;width:100%}
-.name-box .icon{font-size:3.5rem;margin-bottom:1rem}
+.name-box .icon{font-size:3.5rem;margin-bottom:.5rem}
 .name-input{font-family:'Outfit',sans-serif;font-size:1.2rem;font-weight:600;
-  padding:.9rem 1.2rem;width:100%;max-width:350px;background:var(--bg2);
+  padding:.8rem 1rem;width:100%;max-width:320px;background:var(--bg2);
   border:3px solid var(--border);border-radius:4px;color:var(--text);
-  text-align:center;outline:none;transition:border-color .3s;margin-top:1rem}
+  text-align:center;outline:none;transition:border-color .3s;margin-top:.8rem}
 .name-input:focus{border-color:var(--gold);box-shadow:0 0 15px rgba(255,215,0,.15)}
-.name-input::placeholder{color:var(--dim)}
-.name-go{font-family:'Press Start 2P',monospace;font-size:.55rem;padding:.8rem 2rem;
+.name-go{font-family:'Press Start 2P',monospace;font-size:.5rem;padding:.7rem 1.8rem;
   background:var(--panel);border:3px solid var(--gold);color:var(--gold);
-  cursor:pointer;transition:all .3s;margin-top:1.2rem}
+  cursor:pointer;transition:all .3s;margin-top:1rem}
 .name-go:hover{background:var(--gold);color:var(--bg)}
-.name-scores{font-family:'Press Start 2P',monospace;font-size:.45rem;padding:.6rem 1.5rem;
+.name-scores{font-family:'Press Start 2P',monospace;font-size:.4rem;padding:.5rem 1.2rem;
   background:transparent;border:2px solid var(--purple);color:var(--purple);
-  cursor:pointer;transition:all .2s;margin-top:.8rem}
+  cursor:pointer;transition:all .2s;margin-top:.6rem}
 .name-scores:hover{background:var(--purple);color:var(--bg)}
 
-/* ═══ GAME ═══ */
+/* ═══ GAME SCREEN ═══ */
 #gameScreen{position:relative}
-.gw{flex:1;display:flex;flex-direction:column;min-height:100vh;position:relative}
+.gw{flex:1;display:flex;flex-direction:column;min-height:100vh;min-height:100dvh}
 
-/* Progress dots */
-.pmap{position:absolute;top:0;left:0;right:0;z-index:30;
-  background:rgba(26,28,46,.85);border-bottom:2px solid var(--border);
-  padding:.6rem 1rem;display:flex;align-items:center;justify-content:center;gap:0}
-.pn{position:relative;display:flex;align-items:center}
-.pd{width:10px;height:10px;border-radius:50%;border:2px solid var(--border);background:var(--bg);transition:all .3s;flex-shrink:0}
-.pd.done{background:var(--green);border-color:var(--green)}.pd.cur{background:var(--gold);border-color:var(--gold);animation:dp 1.5s ease-in-out infinite}
-@keyframes dp{0%,100%{box-shadow:0 0 4px rgba(255,215,0,.3)}50%{box-shadow:0 0 12px rgba(255,215,0,.6)}}
-.pl{width:16px;height:2px;background:var(--border);flex-shrink:0}.pl.done{background:var(--green)}
+/* Progress map */
+.pmap{position:fixed;top:0;left:0;right:0;z-index:30;
+  background:rgba(15,14,26,.9);border-bottom:2px solid var(--border);
+  padding:.5rem .8rem;display:flex;align-items:center;justify-content:center;gap:0}
+.pn{display:flex;align-items:center}
+.pd{width:9px;height:9px;border-radius:50%;border:2px solid var(--border);background:var(--bg);transition:all .3s;flex-shrink:0}
+.pd.done{background:var(--green);border-color:var(--green)}
+.pd.cur{background:var(--gold);border-color:var(--gold);animation:dotPulse 1.5s ease-in-out infinite}
+@keyframes dotPulse{0%,100%{box-shadow:0 0 4px rgba(255,215,0,.3)}50%{box-shadow:0 0 12px rgba(255,215,0,.6)}}
+.pl{width:14px;height:2px;background:var(--border);flex-shrink:0}.pl.done{background:var(--green)}
 
-/* Scene */
-.scene{flex:1;position:relative;min-height:450px;overflow:hidden;transition:background 1.2s ease}
+/* Scene viewport */
+.scene{flex:1;position:relative;min-height:200px;overflow:hidden;transition:background 1s ease}
 .scene.beach{background:linear-gradient(180deg,#87CEEB 0%,#b0e0f0 40%,#f5deb3 68%,#e8c872 100%)}
 .scene.sunset{background:linear-gradient(180deg,#ff7e5f 0%,#feb47b 30%,#f5deb3 65%,#deb887 100%)}
 .scene.night{background:linear-gradient(180deg,#0f0c29 0%,#1a1c2e 40%,#2d2f52 70%,#252850 100%)}
 .scene.dusk{background:linear-gradient(180deg,#2c3e6b 0%,#f0946c 35%,#f5deb3 65%,#deb887 100%)}
 .scene.morning{background:linear-gradient(180deg,#ffecd2 0%,#fcb69f 20%,#87CEEB 50%,#b0e0f0 70%,#f5deb3 100%)}
-.scene.party{background:linear-gradient(180deg,#1a0a2e 0%,#2d1b4e 30%,#1a1c2e 60%,#252850 100%)}
+.scene.party{background:linear-gradient(180deg,#0a0020 0%,#1a0050 30%,#2d0080 60%,#0a0020 100%)}
+.scene.highway{background:linear-gradient(180deg,#87CEEB 0%,#b0e0f0 50%,#4a7c10 66%,#555 70%,#444 100%)}
 
-.ground{position:absolute;bottom:0;left:0;right:0;height:33%;z-index:1}
+.ground{position:absolute;bottom:0;left:0;right:0;height:32%;z-index:1}
 .scene.beach .ground,.scene.morning .ground{background:linear-gradient(180deg,#f5deb3,#e8c872)}
 .scene.sunset .ground,.scene.dusk .ground{background:linear-gradient(180deg,#deb887,#c4a265)}
 .scene.night .ground,.scene.party .ground{background:linear-gradient(180deg,#2a2d4a,#1e2040)}
-
 .cel{position:absolute;border-radius:50%;z-index:0;transition:all 1s}
-.cel.sun{width:60px;height:60px;background:radial-gradient(circle,#ffe066,#ffa500);top:12%;right:20%;box-shadow:0 0 40px rgba(255,200,0,.4)}
-.cel.moon{width:50px;height:50px;background:radial-gradient(circle at 35% 35%,#e8e6f0,#c0c0d0);top:10%;right:25%;box-shadow:0 0 30px rgba(200,200,255,.3)}
-.cel.sunrise{width:70px;height:70px;background:radial-gradient(circle,#ffe066,#ff9a56);top:25%;right:15%;box-shadow:0 0 50px rgba(255,180,0,.4)}
-
-.waves{position:absolute;bottom:32%;left:0;right:0;height:20px;z-index:2;overflow:hidden}
+.cel.sun{width:50px;height:50px;background:radial-gradient(circle,#ffe066,#ffa500);top:12%;right:20%;box-shadow:0 0 30px rgba(255,200,0,.4)}
+.cel.moon{width:40px;height:40px;background:radial-gradient(circle at 35% 35%,#e8e6f0,#c0c0d0);top:10%;right:25%;box-shadow:0 0 20px rgba(200,200,255,.3)}
+.cel.sunrise{width:60px;height:60px;background:radial-gradient(circle,#ffe066,#ff9a56);top:22%;right:15%;box-shadow:0 0 40px rgba(255,180,0,.4)}
+.cel.bigsun{width:100px;height:100px;background:radial-gradient(circle,#ffe066,#ff6600);top:5%;right:15%;
+  box-shadow:0 0 60px rgba(255,150,0,.6);animation:sunPulse 1.5s ease-in-out infinite}
+@keyframes sunPulse{0%,100%{transform:scale(1);box-shadow:0 0 60px rgba(255,150,0,.6)}
+  50%{transform:scale(1.15);box-shadow:0 0 100px rgba(255,150,0,.8)}}
+.waves{position:absolute;bottom:31%;left:0;right:0;height:20px;z-index:2;overflow:hidden}
 .wave{position:absolute;bottom:0;width:200%;height:20px;
   background:url("data:image/svg+xml,%3Csvg viewBox='0 0 1440 20' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0,10 Q180,0 360,10 Q540,20 720,10 Q900,0 1080,10 Q1260,20 1440,10' fill='none' stroke='rgba(79,195,247,0.3)' stroke-width='2'/%3E%3C/svg%3E") repeat-x;
-  animation:wm 4s linear infinite}
-@keyframes wm{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-
-/* Night stars */
+  animation:waveMove 4s linear infinite}
+@keyframes waveMove{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .sst{position:absolute;top:0;left:0;right:0;bottom:50%;overflow:hidden;opacity:0;transition:opacity 1s}
 .scene.night .sst,.scene.party .sst{opacity:1}
 
-/* ═══ SPRITE ═══ */
-.sw{position:absolute;bottom:18%;z-index:10;transition:left 1.5s ease-in-out,bottom .6s ease;left:10%}
-.sprite{width:48px;display:flex;flex-direction:column;align-items:center}
-.sp-head{width:26px;height:26px;background:#ffd5a0;border-radius:50%;position:relative;border:2px solid #dda070}
-.sp-head::before{content:'';position:absolute;top:-7px;left:-3px;right:-3px;height:15px;background:#4a3728;border-radius:12px 12px 0 0}
-.sp-eyes{position:absolute;top:11px;left:5px;right:5px;display:flex;justify-content:space-between}
-.sp-eye{width:4px;height:4px;background:#333;border-radius:50%}
-.sp-torso{width:30px;height:22px;background:var(--blue);border-radius:4px 4px 0 0;margin-top:-2px}
-.sp-legs{display:flex;gap:4px}.sp-leg{width:11px;height:18px;background:#4a6fa5;border-radius:0 0 3px 3px}
-.walking .sp-leg:first-child{animation:wl .35s ease-in-out infinite alternate}
-.walking .sp-leg:last-child{animation:wr .35s ease-in-out infinite alternate}
-@keyframes wl{0%{transform:rotate(-18deg)}100%{transform:rotate(18deg)}}
-@keyframes wr{0%{transform:rotate(18deg)}100%{transform:rotate(-18deg)}}
+/* ═══ CHARACTER ═══ */
+.char{position:absolute;z-index:10;transition:left 1.2s ease-in-out,bottom .5s ease;bottom:18%;left:15%}
+.sprite{width:44px;display:flex;flex-direction:column;align-items:center;position:relative}
+.sp-head{width:24px;height:24px;background:#ffd5a0;border-radius:50%;position:relative;border:2px solid #dda070}
+.sp-hair{position:absolute;top:-6px;left:-2px;right:-2px;height:14px;background:#4a3728;border-radius:10px 10px 0 0}
+.sp-eyes{position:absolute;top:10px;left:4px;right:4px;display:flex;justify-content:space-between}
+.sp-eye{width:3px;height:3px;background:#333;border-radius:50%}
+.sp-body{width:28px;height:20px;background:var(--blue);border-radius:4px 4px 0 0;margin-top:-2px;transition:all .5s}
+.sp-legs{display:flex;gap:3px}.sp-leg{width:10px;height:16px;background:#4a6fa5;border-radius:0 0 3px 3px}
+.sp-drink{position:absolute;right:-14px;top:14px;font-size:.7rem;display:none}
+.sp-zzz{position:absolute;top:-15px;right:-10px;font-size:.6rem;display:none;animation:zzzFloat 2s ease-in-out infinite}
+@keyframes zzzFloat{0%,100%{transform:translateY(0);opacity:.5}50%{transform:translateY(-10px);opacity:1}}
 
-/* Splash */
-.splash{position:absolute;bottom:0;left:50%;transform:translateX(-50%);pointer-events:none;opacity:0}
-.splash.go{animation:splashAnim .8s ease-out forwards}
-@keyframes splashAnim{0%{opacity:1;transform:translateX(-50%) scale(.5)}40%{opacity:1;transform:translateX(-50%) scale(1.5)}100%{opacity:0;transform:translateX(-50%) scale(2) translateY(-30px)}}
-.splash-drop{position:absolute;width:6px;height:6px;background:var(--blue);border-radius:50%}
+/* Char poses */
+.char.idle .sprite{animation:idleBob 2s ease-in-out infinite}
+@keyframes idleBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.char.walk .sp-leg:first-child{animation:legF .35s ease-in-out infinite}
+.char.walk .sp-leg:last-child{animation:legB .35s ease-in-out infinite}
+@keyframes legF{0%,100%{transform:rotate(0)}50%{transform-origin:top;transform:rotate(20deg)}}
+@keyframes legB{0%,100%{transform:rotate(0)}50%{transform-origin:top;transform:rotate(-20deg)}}
+.char.dodge .sprite{animation:dodgeMove 1.6s ease-in-out infinite}
+@keyframes dodgeMove{0%,100%{transform:translateX(0) rotate(0)}
+  20%{transform:translateX(-25px) rotate(-12deg)}
+  40%{transform:translateX(20px) rotate(10deg)}
+  60%{transform:translateX(-15px) rotate(-8deg)}
+  80%{transform:translateX(25px) rotate(12deg)}}
+.char.eat .sprite{animation:eatBob .5s ease-in-out infinite}
+.char.eat .sp-body{transform:scaleY(1.05) scaleX(1.08)}
+@keyframes eatBob{0%,100%{transform:translateY(0)}50%{transform:translateY(-3px)}}
+.char.celebrate .sprite{animation:celebJump .4s ease-in-out infinite}
+@keyframes celebJump{0%,100%{transform:translateY(0)}50%{transform:translateY(-18px)}}
+.char.sleeping .sprite{transform:rotate(80deg) translateY(10px);transform-origin:bottom center}
+.char.sleeping .sp-zzz{display:block}
+.char.shield .sprite{animation:shieldSway 2s ease-in-out infinite}
+@keyframes shieldSway{0%,100%{transform:rotate(-8deg) translateX(-3px)}50%{transform:rotate(8deg) translateX(3px)}}
+.char.drinking .sp-drink{display:block;animation:drinkSwirl 2s ease-in-out infinite}
+@keyframes drinkSwirl{0%,100%{transform:rotate(-8deg)}50%{transform:rotate(8deg)}}
+.char.swagger .sp-leg:first-child{animation:legF .5s ease-in-out infinite}
+.char.swagger .sp-leg:last-child{animation:legB .5s ease-in-out infinite}
+.char.swagger .sprite{animation:swaggerWalk .8s ease-in-out infinite}
+@keyframes swaggerWalk{0%,100%{transform:rotate(-3deg)}50%{transform:rotate(3deg)}}
+.char.faceplant .sprite{animation:faceplant .5s ease forwards}
+@keyframes faceplant{0%{transform:rotate(0)}100%{transform:rotate(90deg) translateX(20px)}}
+.char.dance .sprite{animation:danceMove .6s ease-in-out infinite}
+@keyframes danceMove{0%,100%{transform:translateY(0) rotate(0)}
+  25%{transform:translateY(-12px) rotate(-6deg)}50%{transform:translateY(-4px) rotate(0)}
+  75%{transform:translateY(-12px) rotate(6deg)}}
 
-/* Party effects */
-.party-fx{position:absolute;inset:0;z-index:5;pointer-events:none;opacity:0;transition:opacity .5s}
-.party-fx.on{opacity:1}
-.disco{position:absolute;width:100%;height:100%;
-  background:repeating-conic-gradient(rgba(255,0,100,.06) 0deg,transparent 12deg,rgba(0,200,255,.06) 24deg,transparent 36deg,rgba(255,215,0,.04) 48deg,transparent 60deg);
-  animation:spin 6s linear infinite}
-@keyframes spin{to{transform:rotate(360deg)}}
-.strobe{position:absolute;inset:0;animation:strobe 0.15s ease-in-out infinite;opacity:0}
-@keyframes strobe{0%,100%{opacity:0}50%{opacity:.08}}
-.strobe{background:#fff}
+/* ═══ PARKER HOUSE ═══ */
+.parker-bld{position:absolute;bottom:32%;left:50%;transform:translateX(-50%);
+  width:55%;max-width:220px;height:42%;z-index:3;
+  background:linear-gradient(180deg,#2a1545,#1a0a2e);
+  border:2px solid #5a3880;border-bottom:none;border-radius:6px 6px 0 0}
+.parker-sign{position:absolute;top:-22px;left:50%;transform:translateX(-50%);z-index:8;
+  font-family:'Press Start 2P',monospace;font-size:clamp(.38rem,1.4vw,.58rem);
+  color:#fff;text-shadow:0 0 8px var(--purple),0 0 20px var(--purple),0 0 40px rgba(167,139,250,.4);
+  animation:neonFlicker 4s ease-in-out infinite;white-space:nowrap}
+@keyframes neonFlicker{0%,18%,22%,25%,53%,57%,100%{opacity:1}20%,24%,55%{opacity:.4}}
+.parker-door{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:28px;height:38px;background:#0a0015;border:2px solid #6a3890;border-bottom:none;border-radius:4px 4px 0 0}
+.parker-door::after{content:'';position:absolute;top:50%;right:4px;width:4px;height:4px;background:var(--gold);border-radius:50%}
+.parker-win{position:absolute;width:22px;height:16px;border:1px solid #6a3890;border-radius:2px;
+  animation:winGlow 2s ease-in-out infinite alternate}
+@keyframes winGlow{0%{background:rgba(167,139,250,.25)}50%{background:rgba(240,98,146,.4)}100%{background:rgba(79,195,247,.35)}}
+.parker-win.pw1{top:15%;left:12%}.parker-win.pw2{top:15%;right:12%}
+.parker-win.pw3{top:45%;left:12%}.parker-win.pw4{top:45%;right:12%}
+.parker-glow{position:absolute;bottom:0;left:50%;transform:translateX(-50%);
+  width:80%;height:40%;background:radial-gradient(ellipse at bottom,rgba(167,139,250,.12),transparent);
+  pointer-events:none;z-index:2}
+.music-note{position:absolute;z-index:6;font-size:1.1rem;opacity:0;
+  animation:noteFloat var(--nd,3s) ease-out infinite;animation-delay:var(--ndl,0s)}
+@keyframes noteFloat{0%{opacity:.8;transform:translateY(0) rotate(0)}
+  100%{opacity:0;transform:translateY(-70px) rotate(var(--nr,15deg))}}
+.crowd{position:absolute;bottom:0;left:0;right:0;height:28%;display:flex;align-items:flex-end;
+  justify-content:center;gap:4px;padding:0 8px;z-index:4}
+.crowd-p{border-radius:6px 6px 0 0;animation:crowdJump var(--d,.6s) ease-in-out infinite;animation-delay:var(--dl,0s)}
+@keyframes crowdJump{0%,100%{transform:translateY(0)}50%{transform:translateY(calc(var(--j,-12px)))}}
+.disco{position:absolute;top:8%;left:50%;transform:translateX(-50%);width:18px;height:18px;
+  background:radial-gradient(circle,#fff,#ddd);border-radius:50%;z-index:7;
+  box-shadow:0 0 15px #fff,0 0 30px var(--gold);animation:discoSpin 3s linear infinite}
+@keyframes discoSpin{0%{box-shadow:0 0 15px #fff,8px 8px 25px var(--purple),-8px -8px 25px var(--pink)}
+  33%{box-shadow:0 0 15px #fff,8px -8px 25px var(--blue),-8px 8px 25px var(--gold)}
+  66%{box-shadow:0 0 15px #fff,-8px 8px 25px var(--coral),8px -8px 25px var(--cyan)}
+  100%{box-shadow:0 0 15px #fff,8px 8px 25px var(--purple),-8px -8px 25px var(--pink)}}
+.party-glow{position:absolute;inset:0;pointer-events:none;z-index:0;
+  animation:partyGlow 3s ease-in-out infinite;opacity:.06}
+@keyframes partyGlow{0%,100%{background:var(--purple)}50%{background:var(--pink)}}
 
-/* Laser beams */
-.lasers{position:absolute;inset:0;overflow:hidden}
-.laser{position:absolute;width:3px;height:200%;top:-50%;opacity:.15;
-  animation:laserSweep var(--sp) ease-in-out infinite alternate}
-.laser:nth-child(1){left:20%;background:var(--pink);--sp:3s;animation-delay:0s;transform:rotate(15deg)}
-.laser:nth-child(2){left:50%;background:var(--blue);--sp:4s;animation-delay:.5s;transform:rotate(-10deg)}
-.laser:nth-child(3){left:75%;background:var(--green);--sp:3.5s;animation-delay:1s;transform:rotate(20deg)}
-.laser:nth-child(4){left:35%;background:var(--purple);--sp:2.8s;animation-delay:.3s;transform:rotate(-18deg)}
-.laser:nth-child(5){left:65%;background:var(--gold);--sp:3.2s;animation-delay:.8s;transform:rotate(12deg)}
-@keyframes laserSweep{0%{transform:rotate(-25deg)}100%{transform:rotate(25deg)}}
+/* ═══ DINNER SCENE ═══ */
+.table{position:absolute;bottom:20%;left:50%;transform:translateX(-50%);width:70%;height:8px;
+  background:#8B4513;border-radius:3px;z-index:3;box-shadow:0 3px 0 #6b3410}
+.table-leg{position:absolute;bottom:-20px;width:6px;height:20px;background:#6b3410;border-radius:0 0 2px 2px}
+.table-leg.tl-l{left:10%}.table-leg.tl-r{right:10%}
+.food-item{position:absolute;z-index:4;font-size:1.8rem;opacity:0}
+.food-item.slide-in{animation:foodSlide .8s ease-out forwards}
+@keyframes foodSlide{0%{transform:translateX(var(--from,100px));opacity:0}100%{transform:translateX(0);opacity:1}}
+.food-stack{position:absolute;bottom:28%;left:50%;transform:translateX(-50%);z-index:4;
+  display:flex;gap:4px;font-size:1.6rem}
+.food-stack span{animation:foodPop .4s ease-out both}
+@keyframes foodPop{0%{transform:scale(0) translateY(20px);opacity:0}100%{transform:scale(1) translateY(0);opacity:1}}
 
-/* Confetti */
-.confetti-wrap{position:absolute;inset:0;overflow:hidden;pointer-events:none}
-.confetti{position:absolute;width:8px;height:8px;top:-10px;animation:fall var(--fd) linear infinite}
-.confetti:nth-child(odd){border-radius:50%}
-@keyframes fall{0%{transform:translateY(0) rotate(0deg);opacity:1}100%{transform:translateY(500px) rotate(720deg);opacity:0}}
+/* ═══ MORNING SCENE ═══ */
+.alarm{position:absolute;font-size:1.5rem;z-index:5;animation:alarmBounce .3s ease-in-out infinite}
+@keyframes alarmBounce{0%,100%{transform:rotate(-10deg)}50%{transform:rotate(10deg)}}
+.sun-rays{position:absolute;top:0;right:0;width:50%;height:60%;
+  background:radial-gradient(ellipse at top right,rgba(255,200,0,.15),transparent 70%);
+  z-index:1;animation:rayPulse 2s ease-in-out infinite}
+@keyframes rayPulse{0%,100%{opacity:.5}50%{opacity:1}}
 
-/* Bouncing emoji */
-.bounce-emojis{position:absolute;inset:0;pointer-events:none;overflow:hidden}
-.bounce-emoji{position:absolute;font-size:1.5rem;animation:floatUp var(--fd) ease-out infinite;opacity:0}
-@keyframes floatUp{0%{opacity:0;transform:translateY(0) scale(.5)}20%{opacity:.8}80%{opacity:.6}100%{opacity:0;transform:translateY(-300px) scale(1.2)}}
+/* ═══ NIGHT SCENE ═══ */
+.neon-bar{position:absolute;top:10%;z-index:5;font-family:'Press Start 2P',monospace;
+  font-size:clamp(.4rem,1.5vw,.65rem);padding:4px 8px;border-radius:3px;
+  animation:barGlow 2s ease-in-out infinite alternate}
+@keyframes barGlow{0%{filter:brightness(1)}100%{filter:brightness(1.3)}}
+.neon-bar.nb-1{left:10%;color:var(--coral);text-shadow:0 0 10px var(--coral);border:1px solid var(--coral)}
+.neon-bar.nb-2{right:10%;color:var(--cyan);text-shadow:0 0 10px var(--cyan);border:1px solid var(--cyan);animation-delay:.5s}
+.street-light{position:absolute;bottom:32%;width:4px;height:45%;background:#555;z-index:3}
+.street-light::after{content:'';position:absolute;top:0;left:-6px;width:16px;height:8px;
+  background:var(--gold);border-radius:50%;box-shadow:0 5px 20px rgba(255,215,0,.3)}
+.street-light.sl-1{left:20%}.street-light.sl-2{right:20%}
 
-/* Bar building */
-.bar-building{position:absolute;bottom:33%;left:50%;transform:translateX(-50%);z-index:4;opacity:0;transition:opacity .5s}
-.bar-building.on{opacity:1}
-.bar-struct{width:240px;height:120px;background:linear-gradient(180deg,#4a2050,#3a1840);border-radius:8px 8px 0 0;position:relative;border:2px solid #6a3080;
-  box-shadow:0 0 40px rgba(180,50,200,.2),inset 0 0 20px rgba(0,0,0,.5)}
-.bar-sign{position:absolute;top:-32px;left:50%;transform:translateX(-50%);
-  font-family:'Press Start 2P',monospace;font-size:.5rem;color:var(--gold);
-  background:linear-gradient(180deg,#3a1040,#2a0830);padding:.5rem 1rem;border:3px solid var(--gold);border-radius:4px;
-  white-space:nowrap;animation:neon 1.5s ease-in-out infinite;text-align:center;line-height:1.6}
-@keyframes neon{0%,100%{text-shadow:0 0 5px rgba(255,215,0,.6),0 0 20px rgba(255,215,0,.3),0 0 40px rgba(255,215,0,.1);box-shadow:0 0 10px rgba(255,215,0,.2)}50%{text-shadow:0 0 15px rgba(255,215,0,1),0 0 30px rgba(255,215,0,.6),0 0 60px rgba(255,215,0,.3);box-shadow:0 0 20px rgba(255,215,0,.4)}}
-.bar-window{position:absolute;width:14px;height:18px;border-radius:2px;
-  animation:barLight .8s ease-in-out infinite alternate}
-@keyframes barLight{0%{background:rgba(255,50,150,.7);box-shadow:0 0 8px rgba(255,50,150,.4)}50%{background:rgba(50,200,255,.7);box-shadow:0 0 8px rgba(50,200,255,.4)}100%{background:rgba(255,215,0,.7);box-shadow:0 0 8px rgba(255,215,0,.4)}}
-.bar-door{position:absolute;bottom:0;left:50%;transform:translateX(-50%);width:36px;height:50px;background:linear-gradient(180deg,#2a0830,#1a0520);border-radius:6px 6px 0 0;border:2px solid #6a3080;border-bottom:none;
-  box-shadow:inset 0 0 15px rgba(255,100,200,.2)}
+/* ═══ SPLASH EFFECT ═══ */
+.splash{position:absolute;bottom:30%;left:50%;transform:translateX(-50%);z-index:15;pointer-events:none;display:none}
+.splash.show{display:block}
+.splash-drop{position:absolute;width:8px;height:8px;background:rgba(79,195,247,.7);border-radius:50%;
+  animation:splashUp .8s ease-out forwards}
+@keyframes splashUp{0%{transform:translate(0,0) scale(1);opacity:1}100%{transform:translate(var(--sx),var(--sy)) scale(0);opacity:0}}
 
-/* Floor glow */
-.floor-glow{position:absolute;bottom:33%;left:0;right:0;height:30px;z-index:2;opacity:0;transition:opacity .5s;
-  background:linear-gradient(180deg,rgba(180,50,200,.15),transparent);
-  animation:floorPulse 2s ease-in-out infinite}
-.floor-glow.on{opacity:1}
-@keyframes floorPulse{0%,100%{opacity:.5}50%{opacity:1}}
+/* ═══ SEAGULL ═══ */
+.seagull{position:absolute;top:15%;z-index:5;font-size:1.2rem;animation:gullFly 6s linear infinite}
+@keyframes gullFly{0%{left:-30px;top:12%}50%{top:8%}100%{left:110%;top:15%}}
 
-/* People silhouettes at bar */
-.crowd{position:absolute;bottom:33%;left:0;right:0;z-index:3;display:flex;justify-content:center;gap:6px;opacity:0;transition:opacity .5s}
-.crowd.on{opacity:1}
-.crowd-person{width:14px;display:flex;flex-direction:column;align-items:center;animation:jump var(--s) ease-in-out infinite}
-@keyframes jump{0%,100%{transform:translateY(0)}50%{transform:translateY(var(--y))}}
-.cp-head{width:10px;height:10px;border-radius:50%;background:var(--color)}
-.cp-body{width:8px;height:16px;border-radius:2px;background:var(--color);margin-top:-1px;opacity:.7}
-.cp-arm{width:10px;height:3px;background:var(--color);opacity:.6;margin-top:-8px;border-radius:2px;
-  animation:armWave var(--s) ease-in-out infinite alternate;transform-origin:center}
-@keyframes armWave{0%{transform:rotate(-30deg)}100%{transform:rotate(30deg)}}
+/* ═══ LIGHTNING (Final Boss) ═══ */
+.lightning{position:absolute;inset:0;pointer-events:none;z-index:8;
+  animation:lightningFlash 3s ease-in-out infinite}
+@keyframes lightningFlash{0%,100%{background:transparent}5%{background:rgba(255,255,255,.3)}6%{background:transparent}
+  8%{background:rgba(255,255,255,.15)}9%{background:transparent}}
+.boss-text{position:absolute;top:8%;left:50%;transform:translateX(-50%);z-index:9;
+  font-family:'Press Start 2P',monospace;font-size:clamp(.6rem,2.5vw,1rem);
+  color:var(--coral);text-shadow:0 0 10px var(--coral),0 0 30px rgba(255,107,107,.4);
+  animation:bossFlash 1s ease-in-out infinite alternate;white-space:nowrap}
+@keyframes bossFlash{0%{opacity:.7;transform:translateX(-50%) scale(1)}100%{opacity:1;transform:translateX(-50%) scale(1.05)}}
 
-/* Location label */
-.loc{position:absolute;top:50px;left:50%;transform:translateX(-50%);z-index:20;
-  font-family:'Press Start 2P',monospace;font-size:.5rem;color:var(--gold);
-  background:rgba(0,0,0,.65);padding:.5rem 1.2rem;border-radius:4px;border:2px solid var(--gold);
-  text-align:center;line-height:1.8;white-space:nowrap;animation:fs .5s ease-out}
-@keyframes fs{0%{opacity:0;transform:translateX(-50%) translateY(-10px)}100%{opacity:1;transform:translateX(-50%) translateY(0)}}
+/* ═══ CONFETTI ═══ */
+.confetti-wrap{position:fixed;inset:0;pointer-events:none;z-index:200}
+.confetti-p{position:absolute;top:-10px;animation:confFall 3s ease-in forwards}
+@keyframes confFall{0%{transform:translateY(0) rotate(0);opacity:1}100%{transform:translateY(110vh) rotate(720deg);opacity:0}}
 
-/* ═══ DIALOG ═══ */
-.dov{position:absolute;bottom:0;left:0;right:0;z-index:50;padding:1rem;display:none}
-.dov.show{display:block;animation:su .4s ease-out}
-@keyframes su{0%{transform:translateY(100%);opacity:0}100%{transform:translateY(0);opacity:1}}
-.dlg{max-width:700px;margin:0 auto;background:rgba(32,35,64,.95);border:3px solid var(--border);
-  border-radius:6px;padding:1.2rem 1.5rem;box-shadow:0 -4px 30px rgba(0,0,0,.5)}
-.dlg-sp{font-family:'Press Start 2P',monospace;font-size:.45rem;color:var(--gold);margin-bottom:.5rem;line-height:1.8}
-.dlg-tx{font-size:.9rem;color:var(--text);line-height:1.7;margin-bottom:1rem}
-.dlg-ch{display:grid;gap:.4rem}
-.dlg-ch.c2{grid-template-columns:1fr 1fr}.dlg-ch.c3{grid-template-columns:1fr 1fr 1fr}
-@media(max-width:550px){.dlg-ch.c2,.dlg-ch.c3{grid-template-columns:1fr}}
-.cb{font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;padding:.9rem .6rem;
-  background:var(--bg);border:2px solid var(--border);border-radius:4px;color:var(--text);
-  cursor:pointer;transition:all .2s;text-align:center}
-.cb:hover{border-color:var(--gold);background:rgba(255,215,0,.08);transform:translateY(-2px)}
-.cb.picked{border-color:var(--gold);background:rgba(255,215,0,.15);box-shadow:0 0 10px rgba(255,215,0,.12)}
-.cb .s{display:block;font-size:.72rem;font-weight:400;color:var(--dim);margin-top:.2rem}
-.nb{font-family:'Press Start 2P',monospace;font-size:.45rem;padding:.6rem 1.5rem;
-  background:var(--panel);border:2px solid var(--green);color:var(--green);
-  cursor:pointer;transition:all .2s;margin-top:.8rem;float:right}
-.nb:hover{background:var(--green);color:var(--bg)}
+/* ═══ DIALOG BOX ═══ */
+.dialog{background:var(--bg);border-top:2px solid var(--border);padding:.8rem 1rem 1rem;
+  overflow-y:auto;max-height:50vh;position:relative;z-index:20;transition:opacity .3s ease}
+.dloc{font-family:'Press Start 2P',monospace;font-size:clamp(.35rem,1vw,.5rem);color:var(--gold);
+  letter-spacing:.1em;margin-bottom:.3rem}
+.dsp{font-family:'Press Start 2P',monospace;font-size:clamp(.45rem,1.2vw,.6rem);color:var(--blue);
+  margin-bottom:.3rem}
+.dtx{color:var(--dim);font-size:.9rem;line-height:1.6;margin-bottom:.7rem}
+.cards{display:grid;gap:.5rem}.cards.c2{grid-template-columns:1fr 1fr}.cards.c3{grid-template-columns:1fr 1fr 1fr}
+@media(max-width:480px){.cards.c3{grid-template-columns:1fr 1fr}}
+.card{background:var(--bg2);border:2px solid var(--border);border-radius:8px;padding:.7rem .5rem;
+  cursor:pointer;transition:all .25s;text-align:center;position:relative}
+.card:hover{border-color:var(--blue);background:rgba(79,195,247,.06);transform:translateY(-2px)}
+.card.sel{border-color:var(--gold);background:rgba(255,215,0,.08);box-shadow:0 0 15px rgba(255,215,0,.1)}
+.card.sel::after{content:'✓';position:absolute;top:4px;right:6px;color:var(--gold);font-size:.6rem;font-weight:700}
+.card-em{font-size:1.4rem;display:block;margin-bottom:.3rem}
+.card-lb{font-family:'Press Start 2P',monospace;font-size:clamp(.3rem,.9vw,.42rem);color:var(--text);margin-bottom:.15rem}
+.card-ds{font-size:.7rem;color:var(--dim);line-height:1.3}
+.wi-wrap{margin-top:.5rem;display:none}.wi-wrap.show{display:block}
+.wi-input,.snack-input{font-family:'Outfit',sans-serif;font-size:.9rem;font-weight:600;
+  padding:.6rem .8rem;width:100%;background:var(--bg2);border:2px solid var(--border);
+  border-radius:4px;color:var(--text);outline:none;transition:border-color .3s;text-align:center}
+.wi-input:focus,.snack-input:focus{border-color:var(--gold);box-shadow:0 0 12px rgba(255,215,0,.12)}
+.nb{font-family:'Press Start 2P',monospace;font-size:.5rem;padding:.7rem 1.5rem;
+  background:var(--panel);border:3px solid var(--gold);color:var(--gold);
+  cursor:pointer;transition:all .3s;margin-top:.7rem;display:none}
+.nb:hover{background:var(--gold);color:var(--bg)}
+.nb.show{display:inline-block}
 
-/* ═══ RESULTS ═══ */
-#resultsScreen{padding:2rem 1.5rem;align-items:center}
-.rbox{max-width:700px;width:100%}
-.rtitle{text-align:center;margin-bottom:2rem}
-.rtitle .icon{font-size:3rem;margin-bottom:.5rem}
-.rc{background:var(--bg2);border:2px solid var(--border);border-radius:4px;padding:1.3rem 1.5rem;margin-bottom:.8rem}
-.rq{font-family:'Press Start 2P',monospace;font-size:.45rem;color:var(--blue);margin-bottom:.8rem;line-height:1.8}
-.rbw{margin-bottom:.6rem}
-.rbl{display:flex;justify-content:space-between;margin-bottom:.2rem;font-size:.85rem}
-.rbl .n{color:var(--text);font-weight:600}.rbl .c{color:var(--dim);font-family:'Press Start 2P',monospace;font-size:.4rem;line-height:2.5}
-.rbt{height:20px;background:var(--bg);border:1px solid var(--border);border-radius:3px;overflow:hidden}
-.rbf{height:100%;transition:width .8s ease-out;border-radius:2px}
-.rbf.w{background:linear-gradient(90deg,var(--gold),#ffec80)}.rbf.o{background:var(--border)}
-.wb{font-family:'Press Start 2P',monospace;font-size:.35rem;color:var(--gold);text-shadow:0 0 6px rgba(255,215,0,.5);margin-left:.3rem}
-.bbtn{font-family:'Press Start 2P',monospace;font-size:.5rem;padding:.7rem 1.5rem;
-  background:var(--panel);border:2px solid var(--gold);color:var(--gold);cursor:pointer;transition:all .2s;margin-top:1rem}
-.bbtn:hover{background:var(--gold);color:var(--bg)}
-
-/* Packet / info card */
-.packet{background:var(--bg2);border:2px solid var(--gold);border-radius:6px;
-  padding:1.5rem;margin-bottom:1.2rem;box-shadow:0 0 20px rgba(255,215,0,.08)}
-.packet-title{font-family:'Press Start 2P',monospace;font-size:.5rem;color:var(--gold);
-  margin-bottom:.8rem;line-height:1.8;text-align:center}
-.packet-row{display:flex;gap:.8rem;padding:.5rem 0;border-bottom:1px solid rgba(74,78,122,.5);
-  align-items:flex-start;font-size:.88rem}
+/* ═══ PACKET ═══ */
+.packet{background:var(--bg2);border:2px solid var(--gold);border-radius:6px;padding:1rem;
+  margin-top:.5rem;text-align:left}
+.packet-title{font-family:'Press Start 2P',monospace;font-size:.45rem;color:var(--gold);margin-bottom:.6rem;letter-spacing:.08em}
+.packet-row{display:flex;gap:.6rem;padding:.4rem 0;border-bottom:1px solid rgba(58,56,112,.5)}
 .packet-row:last-child{border-bottom:none}
-.packet-icon{font-size:1.1rem;flex-shrink:0;width:24px;text-align:center}
-.packet-label{color:var(--dim);font-size:.72rem;text-transform:uppercase;letter-spacing:.05em}
-.packet-val{color:var(--text);font-weight:600}
-.packet-link{color:var(--blue);text-decoration:none;word-break:break-all;font-weight:600;font-size:.82rem}
-.packet-link:hover{text-decoration:underline}
+.packet-icon{font-size:1rem;flex-shrink:0;width:22px;text-align:center}
+.packet-label{color:var(--dim);font-size:.65rem;text-transform:uppercase;letter-spacing:.05em}
+.packet-val{color:var(--text);font-weight:600;font-size:.85rem}
+.packet-link{color:var(--blue);text-decoration:none;font-weight:600;font-size:.8rem}
 
-/* Snack input */
-.snack-input{font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:600;
-  padding:.7rem 1rem;width:100%;background:var(--bg);border:2px solid var(--border);
-  border-radius:4px;color:var(--text);outline:none;text-align:center;margin-top:.5rem;
-  grid-column:1/-1}
-.snack-input:focus{border-color:var(--gold);box-shadow:0 0 12px rgba(255,215,0,.15)}
-.snack-input::placeholder{color:var(--dim);font-weight:400}
+/* ═══ SCORES SCREEN ═══ */
+#scoresScreen{padding:1rem;overflow-y:auto;background:var(--bg)}
+.scores-wrap{max-width:560px;margin:0 auto;padding-top:.5rem}
+.scores-title{font-family:'Press Start 2P',monospace;font-size:clamp(.6rem,2vw,.9rem);
+  color:var(--gold);text-align:center;margin-bottom:.3rem}
+.scores-sub{text-align:center;color:var(--dim);font-size:.85rem;margin-bottom:1rem}
+.rcard{background:var(--bg2);border:2px solid var(--border);border-radius:8px;padding:1rem;margin-bottom:.7rem}
+.rcard-q{font-family:'Press Start 2P',monospace;font-size:.4rem;color:var(--blue);
+  text-transform:uppercase;letter-spacing:.08em;margin-bottom:.6rem}
+.rrow{display:flex;align-items:center;gap:.5rem;margin-bottom:.4rem}
+.rrow-label{font-size:.85rem;flex:1;font-weight:500}
+.rbar-bg{width:90px;height:5px;background:rgba(255,255,255,.06);border-radius:3px;overflow:hidden;flex-shrink:0}
+.rbar{height:100%;border-radius:3px;background:linear-gradient(90deg,var(--blue),var(--gold));transition:width .6s}
+.rrow-ct{font-size:.7rem;color:var(--dim);width:24px;text-align:right;flex-shrink:0}
+.rwi{margin-top:.4rem;padding-top:.4rem;border-top:1px solid var(--border)}
+.rwi-label{font-size:.55rem;text-transform:uppercase;letter-spacing:.1em;color:var(--dim);margin-bottom:.2rem}
+.rwi-item{font-size:.8rem;color:var(--gold);padding:.1rem 0}
+.snack-section{background:rgba(255,183,77,.05);border:1px solid rgba(255,183,77,.15);
+  border-radius:6px;padding:.7rem;margin-bottom:.7rem}
+.snack-title{font-family:'Press Start 2P',monospace;font-size:.35rem;color:var(--orange);margin-bottom:.4rem}
+.snack-item{font-size:.8rem;color:var(--orange);padding:.1rem 0}
+.scores-nav{display:flex;gap:.7rem;justify-content:center;margin-top:1rem;padding-bottom:1rem}
 
-/* Snack results */
-.snack-list{margin-top:.5rem;padding:.6rem .8rem;background:rgba(255,183,77,.06);
-  border:1px solid var(--border);border-radius:3px}
-.snack-item{font-size:.82rem;color:var(--orange);padding:.2rem 0;line-height:1.5}
-.snack-label{font-family:'Press Start 2P',monospace;font-size:.35rem;color:var(--orange);
-  margin-bottom:.3rem;letter-spacing:.1em}
-
-/* Write-in */
-.writein-wrap{grid-column:1/-1;display:none;margin-top:.3rem}
-.writein-wrap.show{display:block}
-.writein{font-family:'Outfit',sans-serif;font-size:.95rem;font-weight:600;
-  padding:.7rem 1rem;width:100%;background:var(--bg);border:2px solid var(--gold);
-  border-radius:4px;color:var(--text);outline:none;text-align:center}
-.writein::placeholder{color:var(--dim);font-weight:400}
-.writein:focus{box-shadow:0 0 12px rgba(255,215,0,.15)}
-
-/* Write-in results */
-.writein-list{margin-top:.5rem;padding:.6rem .8rem;background:rgba(79,195,247,.06);
-  border:1px solid var(--border);border-radius:3px}
-.writein-item{font-size:.82rem;color:var(--cyan);padding:.2rem 0;line-height:1.5}
-.writein-label{font-family:'Press Start 2P',monospace;font-size:.35rem;color:var(--cyan);
-  margin-bottom:.3rem;letter-spacing:.1em}
+@media(max-width:480px){
+  .scene{min-height:180px}
+  .dialog{padding:.7rem .8rem .8rem;max-height:55vh}
+  .title-scene{min-height:200px}
+}
 </style>
 </head>
 <body>
 
-<!-- TITLE -->
-<div class="screen active" id="titleScreen">
-  <div class="stars" id="stars"></div>
-  <div class="tc">
-    <div class="icon">&#127754;</div>
-    <h1>JERSEY SHORE</h1>
-    <div class="sub">SALO'S BIRTHDAY &bull; JUNE 2026</div>
-    <div class="td"><strong>June 11 &ndash; 14</strong><br>202 15th Ave, Belmar, NJ</div>
-    <button class="sbtn" onclick="goName()">&#9654; START GAME</button>
-    <div class="blink">PRESS START</div>
+<!-- ═══ TITLE ═══ -->
+<div id="titleScreen" class="screen active">
+  <div class="title-scene">
+    <div class="road-line"></div>
+    <div class="car">
+      <div class="car-top"></div><div class="car-window"></div>
+      <div class="car-body"></div>
+      <div class="car-wheel cw-f"></div><div class="car-wheel cw-b"></div>
+      <div class="car-exhaust">💨</div>
+    </div>
+    <div class="road-sign rs-1"><span>BELMAR →</span><div class="post"></div></div>
+    <div class="road-sign rs-2"><span>EXIT 98</span><div class="post"></div></div>
+    <div class="road-sign rs-3"><span>SHORE BOUND 🏖️</span><div class="post"></div></div>
+    <div class="palm palm-1">🌴</div>
+    <div class="palm palm-2">🌴</div>
+  </div>
+  <div class="title-ui">
+    <h1 class="px">JERSEY<br>SHORE</h1>
+    <div class="title-sub px">SALO'S BIRTHDAY &bull; JUNE 2026</div>
+    <div class="title-detail"><strong>June 11 – 14</strong><br>202 15th Ave, Belmar, NJ</div>
+    <button class="start-btn px" onclick="showScreen('nameScreen')">▶ START GAME</button>
+    <div class="blink px">PRESS START</div>
   </div>
 </div>
 
-<!-- NAME INPUT -->
-<div class="screen" id="nameScreen">
+<!-- ═══ NAME ═══ -->
+<div id="nameScreen" class="screen">
   <div class="name-box" style="margin:auto">
-    <div class="icon" style="font-size:3.5rem;margin-bottom:.5rem">&#127918;</div>
-    <div class="px" style="font-size:.65rem;color:var(--gold);line-height:2">ENTER YOUR NAME</div>
-    <p style="color:var(--dim);font-size:.88rem;margin-top:.5rem">Type your name to begin the quest.</p>
-    <input class="name-input" id="nameInput" placeholder="Your name..." maxlength="30" autocomplete="off">
-    <br>
-    <button class="name-go" id="nameGo" onclick="startGame()">&#9654; BEGIN QUEST</button>
-    <br>
-    <button class="name-scores" onclick="goResults()">&#127942; VIEW SCORES</button>
+    <div class="icon">🎮</div>
+    <div class="px" style="font-size:clamp(.55rem,1.5vw,.7rem);color:var(--gold)">ENTER YOUR NAME</div>
+    <p style="color:var(--dim);margin-top:.3rem;font-size:.9rem">So we know who's who.</p>
+    <input class="name-input" id="nameInput" placeholder="Your name" maxlength="30" autocomplete="off">
+    <br><button class="name-go px" id="nameBtn" onclick="startQuest()">▶ BEGIN QUEST</button>
+    <br><button class="name-scores px" onclick="goScores()">🏆 VIEW SCORES</button>
   </div>
 </div>
 
-<!-- GAME -->
-<div class="screen" id="gameScreen">
+<!-- ═══ GAME ═══ -->
+<div id="gameScreen" class="screen">
   <div class="gw">
     <div class="pmap" id="pmap"></div>
-    <div class="scene beach" id="scene">
-      <div class="sst" id="sst"></div>
-      <div class="cel sun" id="cel"></div>
-      <div class="loc" id="loc">JERSEY SHORE</div>
-      <div class="waves"><div class="wave"></div></div>
+    <div class="scene" id="scene">
+      <div class="sst" id="sceneStars"></div>
+      <div id="celWrap"></div>
+      <div id="propsLayer"></div>
+      <div class="waves" id="wavesEl"><div class="wave"></div></div>
       <div class="ground"></div>
-
-      <!-- Party FX -->
-      <div class="party-fx" id="partyFx">
-        <div class="disco"></div>
-        <div class="strobe"></div>
-        <div class="lasers"><div class="laser"></div><div class="laser"></div><div class="laser"></div><div class="laser"></div><div class="laser"></div></div>
-        <div class="confetti-wrap" id="confettiWrap"></div>
-        <div class="bounce-emojis" id="bounceEmojis"></div>
-      </div>
-      <div class="floor-glow" id="floorGlow"></div>
-
-      <!-- Bar building -->
-      <div class="bar-building" id="barBuilding">
-        <div class="bar-struct">
-          <div class="bar-sign" id="barSign">PARKER HOUSE</div>
-          <div class="bar-window" style="top:15px;left:15px"></div>
-          <div class="bar-window" style="top:15px;left:45px"></div>
-          <div class="bar-window" style="top:15px;right:45px"></div>
-          <div class="bar-window" style="top:15px;right:15px"></div>
-          <div class="bar-window" style="top:50px;left:20px"></div>
-          <div class="bar-window" style="top:50px;right:20px"></div>
-          <div class="bar-door"></div>
-        </div>
-      </div>
-
-      <!-- Crowd -->
-      <div class="crowd" id="crowd"></div>
-
-      <!-- Sprite -->
-      <div class="sw" id="sw">
-        <div class="sprite" id="sprite">
-          <div class="sp-head"><div class="sp-eyes"><div class="sp-eye"></div><div class="sp-eye"></div></div></div>
-          <div class="sp-torso"></div>
+      <div class="char idle" id="char">
+        <div class="sprite">
+          <div class="sp-head"><div class="sp-hair"></div><div class="sp-eyes"><div class="sp-eye"></div><div class="sp-eye"></div></div></div>
+          <div class="sp-body"></div>
           <div class="sp-legs"><div class="sp-leg"></div><div class="sp-leg"></div></div>
-        </div>
-        <div class="splash" id="splash">
-          <div class="splash-drop" style="top:-10px;left:-8px"></div>
-          <div class="splash-drop" style="top:-15px;left:2px"></div>
-          <div class="splash-drop" style="top:-12px;left:12px"></div>
-          <div class="splash-drop" style="top:-8px;left:-4px"></div>
-          <div class="splash-drop" style="top:-18px;left:6px"></div>
-        </div>
-      </div>
-
-      <!-- Dialog -->
-      <div class="dov" id="dov">
-        <div class="dlg">
-          <div class="dlg-sp" id="dsp"></div>
-          <div class="dlg-tx" id="dtx"></div>
-          <div class="dlg-ch" id="dch"></div>
-          <button class="nb" id="nbtn" onclick="nextStep()" style="display:none">NEXT &#9654;</button>
+          <div class="sp-drink">🍸</div>
+          <div class="sp-zzz">💤</div>
         </div>
       </div>
     </div>
+    <div class="dialog" id="dialog"></div>
   </div>
 </div>
 
-<!-- RESULTS -->
-<div class="screen" id="resultsScreen">
-  <div class="rbox">
-    <div class="rtitle">
-      <div class="icon">&#127942;</div>
-      <div class="px" style="font-size:.65rem;color:var(--gold);line-height:2;margin-bottom:.3rem">THE PEOPLE HAVE SPOKEN</div>
-      <div id="rCount" style="color:var(--dim);font-size:.88rem"></div>
-    </div>
-    <div id="rCon"></div>
-    <div style="text-align:center">
-      <button class="bbtn" onclick="goName()">&#127918; PLAY AGAIN</button>
-      <br><button class="bbtn" onclick="goTitle()" style="margin-top:.5rem;border-color:var(--blue);color:var(--blue)">&#9664; TITLE</button>
-    </div>
-  </div>
+<!-- ═══ SCORES ═══ -->
+<div id="scoresScreen" class="screen">
+  <div class="scores-wrap" id="scoresContent"></div>
 </div>
 
 <script>
+// ═══════════════════════════════
+//  SALO'S BIRTHDAY QUEST v2
+// ═══════════════════════════════
+
 const STEPS=[
-  {id:'_welcome',scene:'beach',cel:'sun',loc:'WELCOME',
-   sp:'&#127854; YO!',tx:"Welcome to Salo's Birthday Weekend! We're posted up at 202 15th Ave, Belmar. It's gonna be a movie. Let's figure out your plan for the weekend.",
-   multi:false,cols:'c2',pos:10,
-   opts:[{v:'yes',l:"LET'S GO",s:"&#128293; I'm ready"}]},
+  {id:'_welcome',scene:'beach',cel:'sun',loc:'BELMAR, NJ',pose:'idle',charX:15,
+   sp:'🌊 YO!',tx:"Welcome to Salo's Birthday Weekend! We're posted up at <strong>202 15th Ave, Belmar</strong>. It's gonna be a movie. Let's plan your weekend.",
+   opts:[{v:'yes',l:"LET'S GO",s:'🔥 I\'m ready',em:'🤙'}]},
 
-  {id:'days',scene:'beach',cel:'sun',loc:'THURSDAY &ndash; SUNDAY',
-   sp:'&#128220; QUEST LOG',tx:"First things first — which days are you coming?",
-   multi:true,cols:'c3',pos:18,
-   opts:[{v:'thursday',l:'Thursday Night',s:'&#127769; Jenkinson\'s'},{v:'friday',l:'Friday',s:'&#9876;&#65039; Main Event'},{v:'saturday',l:'Saturday',s:'&#128128; Final Boss'}]},
+  {id:'days',scene:'beach',cel:'sun',loc:'SCHEDULE',pose:'idle',charX:20,
+   sp:'📋 QUEST LOG',tx:"Which days are you coming? Select all that apply.",
+   multi:true,cols:'c3',
+   opts:[{v:'thursday',l:'Thursday',s:'🌴 Jenkinson\'s',em:'🌙'},{v:'friday',l:'Friday',s:'⚔️ Main Event',em:'🏖️'},{v:'saturday',l:'Saturday',s:'💀 Final Boss',em:'☀️'}]},
 
-  {id:'fridayDay',scene:'beach',cel:'sun',loc:'FRIDAY &bull; DAYTIME',
-   sp:'&#9728;&#65039; FRIDAY MORNING',tx:"The sun is up. The beach is calling. What's the move?",
-   multi:false,cols:'c2',pos:30,splash:'beach',
-   opts:[{v:'beach',l:'Beach Day',s:'&#127754; Jump in the water'},{v:'house',l:'House Hangout',s:'&#127968; Day drinks inside'}]},
+  {id:'fridayDay',scene:'beach',cel:'sun',loc:'FRIDAY · DAYTIME',pose:'idle',charX:25,
+   sp:'☀️ FRIDAY MORNING',tx:"The sun is up. The beach is calling. What's the move?",
+   cols:'c2',splash:true,
+   opts:[{v:'beach',l:'Beach Day',s:'🏖️ Jump in the water',em:'🌊'},{v:'house',l:'House Hangout',s:'🏠 Day drinks',em:'🍺'}]},
 
-  {id:'_parker',scene:'party',cel:'moon',loc:'FRIDAY &bull; 4 PM',
-   sp:'&#127881; YOU ENTER PARKER HOUSE',tx:"The bass is thumping. The crowd is packed. Drinks are flowing. This place is chaos and you love it. You got here before 6 like a smart person. Right?",
-   multi:false,cols:'c2',pos:45,bar:true,
-   opts:[{v:'yes',l:'Obviously',s:'&#128526; Before 6 PM like a pro'},{v:'late',l:'...I was late',s:'&#128553; The line was brutal'}]},
+  {id:'_parker',scene:'party',cel:'moon',loc:'FRIDAY · 4 PM',pose:'dance',charX:55,parker:true,
+   sp:'⚡ PARKER HOUSE',tx:"You walk up to Parker House and the music hits you from outside. Inside it's PACKED — everyone's dancing, the drinks are flowing, the vibes are immaculate. You got here before 6, right?",
+   cols:'c2',
+   opts:[{v:'yes',l:'Obviously',s:'😎 Before 6 like a pro',em:'🍻'},{v:'late',l:'...I was late',s:'😰 The line was brutal',em:'😬'}]},
 
-  {id:'dinner',scene:'sunset',cel:'sun',loc:'FRIDAY &bull; DINNER',
-   sp:'&#127860; TIME TO REFUEL',tx:"Parker House was legendary. Now you need food. Real food. Where are we eating?",
-   multi:false,cols:'c3',pos:55,
-   opts:[{v:'delpontes',l:"Del Ponte's",s:'&#127837; Italian'},{v:'marina',l:'Marina Grille',s:'&#127754; Seafood &bull; Waterfront'},{v:'dolcevita',l:'Dolce Vita',s:'&#127815; Italian &bull; BYOB'}]},
+  {id:'dinner',scene:'sunset',cel:'sun',loc:'FRIDAY · DINNER',pose:'eat',charX:40,dinner:true,
+   sp:'🍽️ TIME TO REFUEL',tx:"Parker House was legendary. Now you need food — REAL food. The plates keep coming. Where are we eating?",
+   cols:'c3',
+   opts:[{v:'delpontes',l:"Del Ponte's",s:'🇮🇹 Italian · Classic',em:'🍝'},{v:'marina',l:'Marina Grille',s:'🦞 Seafood · Waterfront',em:'🌊'},{v:'dolcevita',l:'Dolce Vita',s:'🍷 Italian · BYOB',em:'🍷'}]},
 
-  {id:'fridayNight',scene:'night',cel:'moon',loc:'FRIDAY &bull; NIGHT',
-   sp:'&#127769; THE NIGHT BECKONS',tx:"Dinner was incredible. But the night is still young. What's the move?",
-   multi:false,cols:'c2',pos:65,writein:true,
-   opts:[{v:'djais',l:"D'Jais",s:'&#127928; Classic madness'},{v:'bara',l:'Bar A',s:'&#127867; Legendary vibes'},{v:'bed',l:"I'm Done",s:'&#128564; No shame'},{v:'_other',l:'Somewhere Else',s:'&#128221; I have a better idea'}]},
+  {id:'fridayNight',scene:'night',cel:'moon',loc:'FRIDAY · NIGHT',pose:'swagger',charX:30,night:true,charDrink:true,
+   sp:'🌙 THE NIGHT BECKONS',tx:"Dinner was incredible. You grab a martini. The neon signs are calling. What's the move?",
+   cols:'c2',writein:true,
+   opts:[{v:'djais',l:"D'Jais",s:"🎵 Classic madness",em:'🔊'},{v:'bara',l:'Bar A',s:'🍹 Legendary vibes',em:'🎶'},
+         {v:'bed',l:"I'm Done",s:'😴 No shame',em:'😴'},{v:'_other',l:'Somewhere Else',s:'✏️ Write it in',em:'📝'}]},
 
-  {id:'brunch',scene:'morning',cel:'sunrise',loc:'SATURDAY &bull; MORNING',
-   sp:'&#9749; SATURDAY MORNING',tx:"You wake up. The sun is aggressive. But brunch exists. Are you in?",
-   multi:false,cols:'c2',pos:72,
-   opts:[{v:'yes',l:'Brunch. Obviously.',s:'&#129480; Eggs, coffee, redemption'},{v:'no',l:'Sleep More',s:'&#128564; I\'ll eat when I eat'}]},
+  {id:'brunch',scene:'morning',cel:'bigsun',loc:'SATURDAY · MORNING',pose:'shield',charX:20,morning:true,
+   sp:'☕ SATURDAY MORNING',tx:"You wake up. The sun is AGGRESSIVE. It's personally attacking your eyeballs. But brunch exists. Are you in?",
+   cols:'c2',
+   opts:[{v:'yes',l:'Brunch',s:'🍳 Eggs, coffee, redemption',em:'☕'},{v:'no',l:'Sleep More',s:"😴 I'll eat when I eat",em:'💤'}]},
 
-  {id:'saturdayDay',scene:'beach',cel:'sun',loc:'SATURDAY &bull; DAYTIME',
-   sp:'&#9728;&#65039; SATURDAY AFTERNOON',tx:"The crew's rallying. Two options on the table — or pitch your own.",
-   multi:false,cols:'c3',pos:82,writein:true,
-   opts:[{v:'donovans',l:"Donovan's Reef",s:'&#127754; Beach + drinks &bull; worth the drive'},{v:'columns',l:'The Columns',s:'&#127867; Happy hour &bull; close to base'},{v:'_other',l:'Somewhere Else',s:'&#128221; Got a spot in mind'}]},
+  {id:'saturdayDay',scene:'beach',cel:'sun',loc:'SATURDAY · AFTERNOON',pose:'idle',charX:35,charDrink:true,
+   sp:'☀️ SATURDAY AFTERNOON',tx:"The crew's rallying. Two spots on the table — or pitch your own.",
+   cols:'c3',writein:true,
+   opts:[{v:'donovans',l:"Donovan's Reef",s:'🏖️ Beach + drinks',em:'🌴'},{v:'columns',l:'The Columns',s:'🍻 Happy hour · close',em:'🍺'},
+         {v:'_other',l:'Somewhere Else',s:'✏️ Got a spot?',em:'📝'}]},
 
-  {id:'snacks',scene:'beach',cel:'sun',loc:'SNACK REQUEST',
-   sp:'&#127839; ONE MORE THING',tx:"We're stocking the house. Any snack or drink requests? Type it in or skip if you're easy.",
-   multi:false,cols:'c2',pos:86,snackInput:true,
-   opts:[{v:'none',l:'No Preference',s:"&#128077; I'll eat anything"}]},
+  {id:'saturdayNight',scene:'night',cel:'moon',loc:'SATURDAY · FINAL BOSS',pose:'idle',charX:45,finalBoss:true,
+   sp:'💀 THE LAST STAND',tx:"This is it. Saturday night. The FINAL BOSS. All remaining HP goes here.",
+   cols:'c2',writein:true,
+   opts:[{v:'djais',l:"D'Jais",s:'🔥 Full send',em:'🔥'},{v:'bed',l:"I'm Out",s:'😴 Respect',em:'🛏️'},
+         {v:'_other',l:'Somewhere Else',s:'✏️ Different bar',em:'📝'}]},
 
-  {id:'saturdayNight',scene:'night',cel:'moon',loc:'SATURDAY &bull; FINAL BOSS',
-   sp:"&#128128; THE LAST STAND",tx:"This is it. Saturday night. The final boss. All remaining HP. What's the call?",
-   multi:false,cols:'c2',pos:90,writein:true,
-   opts:[{v:'djais',l:"D'Jais",s:'&#128293; Full send'},{v:'bed',l:"I'm Out",s:'&#128564; Respect'},{v:'_other',l:'Somewhere Else',s:'&#128221; Different bar in mind'}]}
+  {id:'snacks',scene:'beach',cel:'sun',loc:'ONE MORE THING',pose:'celebrate',charX:50,
+   sp:'🍕 SNACK REQUEST',tx:"We're stocking the house. Any snack or drink requests? Type it in or skip.",
+   snackInput:true,
+   opts:[{v:'none',l:'No Preference',s:"👍 I'll eat anything",em:'🤷'}]},
 ];
 
 const Q_META={
@@ -457,321 +475,416 @@ const Q_META={
   saturdayNight:{l:'Saturday Night',o:{djais:"D'Jais",bed:"Done"},wi:true}
 };
 
-let currentUser=null,stepIdx=0,userVote={},votes={};
-const API='/api/votes';
+let stepIdx=0, playerName='', userVote={}, allVotes={};
+const $=id=>document.getElementById(id);
 
-async function load(){
-  try{const r=await fetch(API);if(r.ok)votes=await r.json()}
-  catch(e){try{const s=localStorage.getItem('bq3');if(s)votes=JSON.parse(s)}catch(e2){votes={}}}
+// ─── API ───
+async function loadVotes(){
+  try{const r=await fetch('/api/votes');if(r.ok){allVotes=await r.json()||{};return}}catch(e){}
+  try{allVotes=JSON.parse(localStorage.getItem('bq_votes2'))||{}}catch(e){allVotes={}}
+}
+async function saveVotes(){
+  if(!playerName)return;
+  allVotes[playerName]=userVote;
+  localStorage.setItem('bq_votes2',JSON.stringify(allVotes));
+  try{await fetch('/api/votes',{method:'POST',headers:{'Content-Type':'application/json'},
+    body:JSON.stringify({name:playerName,vote:userVote})})}catch(e){}
 }
 
-async function save(){
-  try{await fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},
-    body:JSON.stringify({name:currentUser,vote:votes[currentUser]})})}catch(e){}
-  try{localStorage.setItem('bq3',JSON.stringify(votes))}catch(e){}
+// ─── SCREENS ───
+function showScreen(id){
+  document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));
+  $(id).classList.add('active');
 }
 
-// Stars
-function mkStars(el,n){for(let i=0;i<n;i++){const s=document.createElement('div');s.className='star';
-  s.style.left=Math.random()*100+'%';s.style.top=Math.random()*100+'%';
-  s.style.setProperty('--d',(2+Math.random()*4)+'s');s.style.setProperty('--b',.3+Math.random()*.7);
-  s.style.animationDelay=Math.random()*4+'s';s.style.width=s.style.height=(1+Math.random()*2.5)+'px';el.appendChild(s)}}
-mkStars(document.getElementById('stars'),80);
-mkStars(document.getElementById('sst'),40);
-
-// Crowd — way more people, jumping, waving arms
-(function(){const c=document.getElementById('crowd');
-  const colors=['#f06292','#4fc3f7','#ffb74d','#b388ff','#66bb6a','#4dd0e1','#ef5350','#ffd700','#ff8a65','#81c784','#ce93d8','#90caf9','#fff176','#f48fb1','#80deea','#a5d6a7'];
-  for(let i=0;i<20;i++){const p=document.createElement('div');p.className='crowd-person';
-    p.style.setProperty('--s',(.6+Math.random()*1)+'s');
-    p.style.setProperty('--y',(-4-Math.random()*10)+'px');
-    p.style.setProperty('--color',colors[i%colors.length]);
-    p.style.animationDelay=(Math.random()*1)+'s';
-    p.innerHTML='<div class="cp-head"></div><div class="cp-arm"></div><div class="cp-body"></div>';c.appendChild(p)}})();
-
-// Confetti particles
-(function(){const w=document.getElementById('confettiWrap');
-  const colors=['#f06292','#4fc3f7','#ffb74d','#b388ff','#66bb6a','#ffd700','#ef5350','#4dd0e1'];
-  for(let i=0;i<30;i++){const c=document.createElement('div');c.className='confetti';
-    c.style.left=Math.random()*100+'%';c.style.background=colors[i%colors.length];
-    c.style.setProperty('--fd',(2+Math.random()*3)+'s');
-    c.style.animationDelay=Math.random()*4+'s';
-    c.style.width=(4+Math.random()*6)+'px';c.style.height=(4+Math.random()*6)+'px';
-    w.appendChild(c)}})();
-
-// Floating party emojis
-(function(){const w=document.getElementById('bounceEmojis');
-  const emojis=['&#127881;','&#127867;','&#127870;','&#128293;','&#129304;','&#127918;','&#127775;','&#128156;','&#127880;','&#128171;','&#127942;','&#9889;'];
-  for(let i=0;i<10;i++){const e=document.createElement('div');e.className='bounce-emoji';
-    e.innerHTML=emojis[i%emojis.length];
-    e.style.left=Math.random()*90+'%';e.style.bottom=(5+Math.random()*20)+'%';
-    e.style.setProperty('--fd',(3+Math.random()*4)+'s');
-    e.style.animationDelay=Math.random()*5+'s';
-    e.style.fontSize=(1+Math.random()*1.5)+'rem';
-    w.appendChild(e)}})();
-
-// Screens
-function show(id){document.querySelectorAll('.screen').forEach(s=>s.classList.remove('active'));document.getElementById(id).classList.add('active')}
-function goTitle(){show('titleScreen')}
-function goName(){show('nameScreen');document.getElementById('nameInput').value='';
-  setTimeout(()=>document.getElementById('nameInput').focus(),300)}
-async function goResults(){show('resultsScreen');await load();renderResults()}
-
-// Name enter key
-document.getElementById('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')startGame()});
-
-async function startGame(){
-  const name=document.getElementById('nameInput').value.trim();
-  if(!name)return;
-  currentUser=name;stepIdx=0;userVote={};
-  await load();
-  if(votes[currentUser])userVote={...votes[currentUser]};
-  show('gameScreen');
-  // Reset visuals
-  document.getElementById('barBuilding').classList.remove('on');
-  document.getElementById('partyFx').classList.remove('on');
-  document.getElementById('crowd').classList.remove('on');
-  document.getElementById('floorGlow').classList.remove('on');
-  renderMap();playStep();
+// ─── STARS ───
+function makeStars(container,n){
+  container.innerHTML='';
+  for(let i=0;i<n;i++){
+    const s=document.createElement('div');
+    s.style.cssText=`position:absolute;background:#fff;border-radius:50%;
+      width:${1+Math.random()*2}px;height:${1+Math.random()*2}px;
+      left:${Math.random()*100}%;top:${Math.random()*100}%;
+      opacity:0;animation:tw ${2+Math.random()*3}s ease-in-out ${Math.random()*3}s infinite`;
+    container.appendChild(s);
+  }
 }
 
-function renderMap(){
-  const m=document.getElementById('pmap');m.innerHTML='';
-  STEPS.forEach((s,i)=>{
-    if(i>0){const l=document.createElement('div');l.className='pl'+(i<stepIdx?' done':'');m.appendChild(l)}
-    const n=document.createElement('div');n.className='pn';
-    const d=document.createElement('div');d.className='pd'+(i<stepIdx?' done':'')+(i===stepIdx?' cur':'');
-    n.appendChild(d);m.appendChild(n);
-  });
-}
+// ─── SCENE BUILDER ───
+function buildScene(step){
+  const scene=$('scene');
+  const props=$('propsLayer');
+  const cel=$('celWrap');
+  const ch=$('char');
+  const wavesEl=$('wavesEl');
 
-function playStep(){
-  if(stepIdx>=STEPS.length){finishGame();return}
-  const step=STEPS[stepIdx];
-  const scene=document.getElementById('scene');
-  const sw=document.getElementById('sw');
-  const cel=document.getElementById('cel');
-  const dov=document.getElementById('dov');
-  const loc=document.getElementById('loc');
-
-  // Scene
+  // Reset
+  props.innerHTML='';
+  cel.innerHTML='';
   scene.className='scene '+step.scene;
-  cel.className='cel '+step.cel;
-  loc.innerHTML=step.loc;
+  ch.className='char '+(step.pose||'idle');
+  ch.style.left=(step.charX||15)+'%';
+  wavesEl.style.display=(step.scene==='beach'||step.scene==='morning')?'block':'none';
 
-  // Bar
-  const bar=document.getElementById('barBuilding');
-  const pfx=document.getElementById('partyFx');
-  const crowd=document.getElementById('crowd');
-  const fg=document.getElementById('floorGlow');
-  if(step.bar){bar.classList.add('on');pfx.classList.add('on');crowd.classList.add('on');fg.classList.add('on');
-    document.getElementById('barSign').textContent='PARKER HOUSE';
-  }else{bar.classList.remove('on');pfx.classList.remove('on');crowd.classList.remove('on');fg.classList.remove('on')}
-
-  // Walk
-  dov.classList.remove('show');
-  sw.classList.add('walking');
-  sw.style.bottom='18%';
-  sw.style.left=step.pos+'%';
-
-  setTimeout(()=>{
-    sw.classList.remove('walking');
-    showDialog(step);
-  },1600);
-  renderMap();
-}
-
-function showDialog(step){
-  document.getElementById('dsp').innerHTML=step.sp;
-  document.getElementById('dtx').textContent=step.tx;
-  const c=document.getElementById('dch');
-  c.className='dlg-ch '+step.cols;c.innerHTML='';
-
-  // Write-in container
-  let wiWrap=null,wiInput=null;
-
-  step.opts.forEach(opt=>{
-    const b=document.createElement('button');b.className='cb';
-    b.innerHTML=opt.l+'<span class="s">'+opt.s+'</span>';
-    if(step.multi){
-      if(userVote[step.id]&&userVote[step.id].includes(opt.v))b.classList.add('picked');
-      b.onclick=()=>{b.classList.toggle('picked');showNb();
-        if(step.splash&&opt.v==='beach'&&b.classList.contains('picked'))doSplash()};
-    }else{
-      const isOther=opt.v==='_other';
-      const curVal=userVote[step.id];
-      // If current value is a custom write-in, highlight "other"
-      if(isOther&&curVal&&curVal.startsWith('custom:'))b.classList.add('picked');
-      else if(curVal===opt.v)b.classList.add('picked');
-      b.onclick=()=>{
-        c.querySelectorAll('.cb').forEach(x=>x.classList.remove('picked'));
-        b.classList.add('picked');
-        if(isOther&&wiWrap){
-          wiWrap.classList.add('show');wiInput.focus();
-          userVote[step.id]='custom:';
-        }else{
-          if(wiWrap)wiWrap.classList.remove('show');
-          userVote[step.id]=opt.v;
-        }
-        showNb();
-        if(step.splash&&opt.v==='beach')doSplash();
-      };
-    }
-    c.appendChild(b);
-  });
-
-  // Snack text input
-  if(step.snackInput){
-    const si=document.createElement('input');si.className='snack-input';
-    si.placeholder='e.g. White Claws, Doritos, hummus...';si.maxLength=80;si.autocomplete='off';
-    if(userVote.snacks&&userVote.snacks!=='none')si.value=userVote.snacks;
-    si.oninput=()=>{userVote.snacks=si.value.trim()||'none';showNb()};
-    si.addEventListener('keydown',e=>{if(e.key==='Enter'){e.preventDefault();showNb()}});
-    c.appendChild(si);
+  // Celestial
+  if(step.cel){
+    const c=document.createElement('div');c.className='cel '+step.cel;
+    cel.appendChild(c);
   }
 
-  // Add write-in input if step supports it
-  if(step.writein){
-    wiWrap=document.createElement('div');wiWrap.className='writein-wrap';
-    wiInput=document.createElement('input');wiInput.className='writein';
-    wiInput.placeholder='Type a bar or spot...';wiInput.maxLength=40;
-    wiInput.autocomplete='off';
-    // Prefill if custom
-    const curVal=userVote[step.id];
-    if(curVal&&curVal.startsWith('custom:')){
-      wiWrap.classList.add('show');
-      wiInput.value=curVal.replace('custom:','');
-    }
-    wiInput.oninput=()=>{userVote[step.id]='custom:'+wiInput.value.trim();showNb()};
-    wiWrap.appendChild(wiInput);c.appendChild(wiWrap);
+  // Stars for night scenes
+  if(step.scene==='night'||step.scene==='party') makeStars($('sceneStars'),40);
+  else $('sceneStars').innerHTML='';
+
+  // Drink
+  if(step.charDrink) ch.classList.add('drinking');
+
+  // ─── PARKER HOUSE ───
+  if(step.parker){
+    // Building
+    props.innerHTML+=`<div class="parker-bld">
+      <div class="parker-sign">PARKER HOUSE</div>
+      <div class="parker-win pw1"></div><div class="parker-win pw2"></div>
+      <div class="parker-win pw3"></div><div class="parker-win pw4"></div>
+      <div class="parker-door"></div></div>`;
+    props.innerHTML+=`<div class="parker-glow"></div>`;
+    props.innerHTML+=`<div class="disco"></div>`;
+    props.innerHTML+=`<div class="party-glow"></div>`;
+    // Music notes floating from building
+    const notes=['🎵','🎶','♪','🎵','🎶','♪','🎵','🎶'];
+    notes.forEach((n,i)=>{
+      const x=25+Math.random()*50;
+      const nd=(2.5+Math.random()*2).toFixed(1);
+      const ndl=(Math.random()*3).toFixed(1);
+      const nr=(-20+Math.random()*40).toFixed(0);
+      props.innerHTML+=`<div class="music-note" style="left:${x}%;bottom:55%;--nd:${nd}s;--ndl:${ndl}s;--nr:${nr}deg">${n}</div>`;
+    });
+    // Crowd dancing
+    let crowdHTML='<div class="crowd">';
+    const colors=['var(--coral)','var(--blue)','var(--purple)','var(--pink)','var(--cyan)','var(--orange)',
+                  'var(--green)','var(--gold)','var(--coral)','var(--blue)','var(--purple)','var(--pink)',
+                  '#e57373','#64b5f6','#ba68c8','#4dd0e1'];
+    colors.forEach((c,i)=>{
+      const h=25+Math.random()*25;
+      const d=(.3+Math.random()*.5).toFixed(2);
+      const dl=(Math.random()*.4).toFixed(2);
+      const j=-8-Math.random()*18;
+      crowdHTML+=`<div class="crowd-p" style="width:18px;height:${h}px;background:${c};
+        --d:${d}s;--dl:${dl}s;--j:${j}px"></div>`;
+    });
+    crowdHTML+='</div>';
+    props.innerHTML+=crowdHTML;
   }
 
-  document.getElementById('nbtn').style.display='none';
-  document.getElementById('dov').classList.add('show');
-  // Auto show next if prefilled
-  if(step.multi&&userVote[step.id]&&userVote[step.id].length)showNb();
-  if(!step.multi&&userVote[step.id])showNb();
+  // ─── DINNER SCENE ───
+  if(step.dinner){
+    props.innerHTML+=`<div class="table"><div class="table-leg tl-l"></div><div class="table-leg tl-r"></div></div>`;
+    const foods=['🍝','🍖','🥗','🍷','🧀','🍕'];
+    let stack='<div class="food-stack">';
+    foods.forEach((f,i)=>{
+      stack+=`<span style="animation-delay:${i*0.3}s">${f}</span>`;
+    });
+    stack+='</div>';
+    props.innerHTML+=stack;
+  }
+
+  // ─── MORNING SCENE ───
+  if(step.morning){
+    props.innerHTML+=`<div class="sun-rays"></div>`;
+    props.innerHTML+=`<div class="alarm" style="top:20%;left:15%">⏰</div>`;
+    props.innerHTML+=`<div class="alarm" style="top:25%;right:20%;animation-delay:.15s">⏰</div>`;
+  }
+
+  // ─── NIGHT SCENE ───
+  if(step.night){
+    props.innerHTML+=`<div class="neon-bar nb-1">D'JAIS</div>`;
+    props.innerHTML+=`<div class="neon-bar nb-2">BAR A</div>`;
+    props.innerHTML+=`<div class="street-light sl-1"></div>`;
+    props.innerHTML+=`<div class="street-light sl-2"></div>`;
+  }
+
+  // ─── FINAL BOSS ───
+  if(step.finalBoss){
+    props.innerHTML+=`<div class="lightning"></div>`;
+    props.innerHTML+=`<div class="boss-text">⚔️ FINAL BOSS ⚔️</div>`;
+  }
+
+  // ─── BEACH SEAGULL ───
+  if(step.scene==='beach'&&!step.parker&&!step.dinner){
+    props.innerHTML+=`<div class="seagull">🐦</div>`;
+  }
 }
 
-function showNb(){document.getElementById('nbtn').style.display='inline-block'}
-
+// ─── SPLASH EFFECT ───
 function doSplash(){
-  const sw=document.getElementById('sw');
-  const sp=document.getElementById('splash');
-  // Jump
-  sw.style.bottom='28%';
-  sp.classList.remove('go');
-  void sp.offsetWidth;
-  setTimeout(()=>{sw.style.bottom='18%';sp.classList.add('go')},500);
+  const el=document.createElement('div');el.className='splash show';
+  for(let i=0;i<15;i++){
+    const d=document.createElement('div');d.className='splash-drop';
+    const angle=Math.random()*Math.PI;
+    const dist=40+Math.random()*60;
+    d.style.setProperty('--sx',(Math.cos(angle)*dist)+'px');
+    d.style.setProperty('--sy',(-Math.sin(angle)*dist)+'px');
+    d.style.animationDelay=Math.random()*0.2+'s';
+    el.appendChild(d);
+  }
+  $('propsLayer').appendChild(el);
+  setTimeout(()=>el.remove(),1500);
 }
 
-function nextStep(){
+// ─── DIALOG BUILDER ───
+function buildDialog(step){
+  const d=$('dialog');
+  let html=`<div class="dloc">${step.loc}</div>`;
+  html+=`<div class="dsp">${step.sp}</div>`;
+  html+=`<div class="dtx">${step.tx}</div>`;
+
+  if(step.snackInput){
+    html+=`<input class="snack-input" id="snackIn" placeholder="e.g. White Claws, Doritos, fruit..." maxlength="120">`;
+    html+=`<div style="display:flex;gap:.5rem;margin-top:.5rem">`;
+    html+=`<button class="nb show" onclick="submitSnack()">CONTINUE ▶</button>`;
+    html+=`<button class="nb show" style="border-color:var(--dim);color:var(--dim)" onclick="submitSnack()">SKIP</button></div>`;
+  } else {
+    const cols=step.cols||'c2';
+    html+=`<div class="cards ${cols}" id="optCards">`;
+    step.opts.forEach(o=>{
+      html+=`<div class="card" data-v="${o.v}" onclick="pickCard(this,'${o.v}')">
+        <span class="card-em">${o.em||''}</span>
+        <div class="card-lb">${o.l}</div>
+        <div class="card-ds">${o.s}</div></div>`;
+    });
+    html+=`</div>`;
+    if(step.writein){
+      html+=`<div class="wi-wrap" id="wiWrap"><input class="wi-input" id="wiInput" placeholder="Type your suggestion..." maxlength="60"></div>`;
+    }
+    html+=`<button class="nb" id="nextBtn" onclick="submitStep()">NEXT ▶</button>`;
+  }
+
+  d.innerHTML=html;
+  d.scrollTop=0;
+}
+
+// ─── PROGRESS MAP ───
+function buildPmap(){
+  const el=$('pmap');
+  let html='';
+  const playable=STEPS.filter(s=>!s.id.startsWith('_')||s.id==='_welcome'||s.id==='_parker');
+  playable.forEach((s,i)=>{
+    if(i>0)html+=`<div class="pl${i<stepIdx?' done':''}"></div>`;
+    const cls=i<stepIdx?'done':i===stepIdx?'cur':'';
+    html+=`<div class="pn"><div class="pd ${cls}"></div></div>`;
+  });
+  el.innerHTML=html;
+}
+
+// ─── CARD INTERACTION ───
+let selected=null,multiSel=new Set();
+
+function pickCard(el,val){
   const step=STEPS[stepIdx];
   if(step.multi){
-    const picks=[];
-    document.querySelectorAll('#dch .cb.picked').forEach(b=>{
-      const opt=step.opts.find(o=>b.innerHTML.includes(o.l));
-      if(opt)picks.push(opt.v);
-    });
-    userVote[step.id]=picks;
-  }
-  // Skip storing _parker in results key (it's just for fun)
-  stepIdx++;playStep();
-}
-
-async function finishGame(){
-  // Clean up internal-only keys
-  const clean={...userVote};delete clean._parker;delete clean._welcome;
-  votes[currentUser]=clean;await save();
-
-  const scene=document.getElementById('scene');scene.className='scene dusk';
-  document.getElementById('cel').className='cel sun';
-  document.getElementById('loc').innerHTML='&#127942; QUEST COMPLETE!';
-  document.getElementById('barBuilding').classList.remove('on');
-  document.getElementById('partyFx').classList.remove('on');
-  document.getElementById('crowd').classList.remove('on');
-  document.getElementById('floorGlow').classList.remove('on');
-
-  const sw=document.getElementById('sw');sw.classList.remove('walking');sw.style.left='45%';
-
-  document.getElementById('dsp').innerHTML='&#127942; YOU\'RE ALL SET, '+currentUser.toUpperCase()+'!';
-  document.getElementById('dtx').innerHTML='Your choices are locked in. Here\'s your info packet for the weekend:';
-  const c=document.getElementById('dch');c.className='dlg-ch';c.style.gridTemplateColumns='1fr';c.innerHTML='';
-  document.getElementById('nbtn').style.display='none';
-
-  // Info packet
-  const pkt=document.createElement('div');pkt.className='packet';
-  pkt.innerHTML=`
-    <div class="packet-title">&#128230; YOUR WEEKEND PACKET</div>
-    <div class="packet-row"><span class="packet-icon">&#127968;</span><div><div class="packet-label">The House</div><div class="packet-val">202 15th Avenue, Belmar, NJ 07719</div></div></div>
-    <div class="packet-row"><span class="packet-icon">&#128279;</span><div><div class="packet-label">Airbnb Listing</div><a class="packet-link" href="https://www.airbnb.com/rooms/1392744599884075499" target="_blank">View the Airbnb</a></div></div>
-    <div class="packet-row"><span class="packet-icon">&#128197;</span><div><div class="packet-label">Dates</div><div class="packet-val">June 11 – 14, 2026 (Thu – Sun)</div></div></div>
-    <div class="packet-row"><span class="packet-icon">&#128205;</span><div><div class="packet-label">Town</div><div class="packet-val">Belmar, NJ — right in the sweet spot</div></div></div>
-    <div class="packet-row"><span class="packet-icon">&#9888;&#65039;</span><div><div class="packet-label">Key Rule</div><div class="packet-val">Parker House BEFORE 6 PM Friday. Non-negotiable.</div></div></div>
-  `;
-  c.appendChild(pkt);
-
-  const btnWrap=document.createElement('div');btnWrap.style.display='grid';btnWrap.style.gridTemplateColumns='1fr 1fr';btnWrap.style.gap='.4rem';
-  const v=document.createElement('button');v.className='cb';v.style.borderColor='var(--gold)';v.style.color='var(--gold)';
-  v.innerHTML='&#127942; View Scores';v.onclick=goResults;btnWrap.appendChild(v);
-  const a=document.createElement('button');a.className='cb';a.style.borderColor='var(--blue)';a.style.color='var(--blue)';
-  a.innerHTML='&#127918; Play Again';a.onclick=goName;btnWrap.appendChild(a);
-  c.appendChild(btnWrap);
-
-  document.getElementById('dov').classList.add('show');renderMap();
-}
-
-// Results (anonymous)
-function renderResults(){
-  load();const voters=Object.keys(votes);const n=voters.length;
-  document.getElementById('rCount').textContent=n===0?'No votes yet.':n+' player'+(n!==1?'s':'')+' voted so far';
-  const con=document.getElementById('rCon');
-  if(!n){con.innerHTML='<p style="color:var(--dim);text-align:center;padding:2rem">Waiting for players...</p>';return}
-
-  let h='';
-  Object.entries(Q_META).forEach(([key,q])=>{
-    h+='<div class="rc"><div class="rq">'+q.l+'</div>';
-    const tallies={};Object.keys(q.o).forEach(k=>{tallies[k]=0});
-    const writeIns=[];
-    const isMulti=key==='days';
-    voters.forEach(name=>{const v=votes[name];if(!v)return;
-      if(isMulti){(v[key]||[]).forEach(val=>{if(tallies[val]!==undefined)tallies[val]++})}
-      else{
-        const val=v[key];
-        if(val&&val.startsWith('custom:')){
-          const custom=val.replace('custom:','').trim();
-          if(custom)writeIns.push(custom);
-        }else if(val&&tallies[val]!==undefined){tallies[val]++}
-      }});
-    const mx=Math.max(...Object.values(tallies),1);
-    const sorted=Object.entries(tallies).sort((a,b)=>b[1]-a[1]);
-    const top=sorted[0][1];
-    sorted.forEach(([k,cnt])=>{
-      const pct=mx>0?(cnt/mx)*100:0;const isW=cnt===top&&cnt>0;
-      h+=`<div class="rbw"><div class="rbl"><span class="n">${q.o[k]}${isW?' <span class="wb">&#127942;</span>':''}</span><span class="c">${cnt} vote${cnt!==1?'s':''}</span></div>
-        <div class="rbt"><div class="rbf ${isW?'w':'o'}" style="width:${Math.max(pct,3)}%"></div></div></div>`;
-    });
-    if(writeIns.length>0){
-      h+='<div class="writein-list"><div class="writein-label">SUGGESTIONS</div>';
-      writeIns.forEach(w=>{h+='<div class="writein-item">&#128172; '+w+'</div>'});
-      h+='</div>';
+    if(multiSel.has(val)){multiSel.delete(val);el.classList.remove('sel')}
+    else{multiSel.add(val);el.classList.add('sel')}
+    $('nextBtn').classList.toggle('show',multiSel.size>0);
+  } else {
+    document.querySelectorAll('#optCards .card').forEach(c=>c.classList.remove('sel'));
+    el.classList.add('sel');
+    selected=val;
+    // Write-in
+    const wi=$('wiWrap');
+    if(wi){
+      if(val==='_other'){wi.classList.add('show');setTimeout(()=>$('wiInput')?.focus(),200)}
+      else wi.classList.remove('show');
     }
-    h+='</div>';
-  });
-  // Snack requests section
-  const snackReqs=[];
-  voters.forEach(name=>{const v=votes[name];if(v&&v.snacks&&v.snacks!=='none')snackReqs.push(v.snacks)});
-  if(snackReqs.length>0){
-    h+='<div class="rc"><div class="rq">Snack &amp; Drink Requests</div>';
-    h+='<div class="snack-list"><div class="snack-label">REQUESTS</div>';
-    snackReqs.forEach(s=>{h+='<div class="snack-item">&#127839; '+s+'</div>'});
-    h+='</div></div>';
+    // Splash on beach pick
+    if(step.splash&&val==='beach') doSplash();
+    // Face-plant on "bed"
+    if(val==='bed'){$('char').className='char faceplant';}
+    else if(step.pose){$('char').className='char '+step.pose;if(step.charDrink)$('char').classList.add('drinking')}
+    $('nextBtn').classList.add('show');
+  }
+}
+
+function submitStep(){
+  const step=STEPS[stepIdx];
+  let val;
+  if(step.multi){
+    if(multiSel.size===0)return;
+    val=Array.from(multiSel);
+  } else {
+    if(!selected)return;
+    val=selected;
+    if(val==='_other'){
+      const wi=$('wiInput');
+      val=wi?wi.value.trim():'';
+      if(!val)return;
+    }
+  }
+  if(!step.id.startsWith('_')){
+    userVote[step.id]=val;
+    saveVotes();
+  }
+  nextStep();
+}
+
+function submitSnack(){
+  const inp=$('snackIn');
+  userVote.snacks=inp&&inp.value.trim()?inp.value.trim():'none';
+  saveVotes();
+  fireConfetti();
+  finishGame();
+}
+
+// ─── NAVIGATION ───
+function nextStep(){
+  selected=null;multiSel.clear();
+  stepIdx++;
+  if(stepIdx>=STEPS.length){finishGame();return}
+  const step=STEPS[stepIdx];
+  const ch=$('char');
+  const dlg=$('dialog');
+
+  // Phase 1: Fade dialog, character walks off to the right
+  dlg.style.transition='opacity 0.3s';
+  dlg.style.opacity='0';
+  ch.className='char walk';
+  ch.style.left='105%';
+
+  // Phase 2: After walk-off, swap scene and walk back in from left
+  setTimeout(()=>{
+    ch.style.transition='none';
+    ch.style.left='-12%';
+    buildScene(step);
+    buildPmap();
+
+    // Force reflow then start walk-in
+    requestAnimationFrame(()=>{requestAnimationFrame(()=>{
+      ch.style.transition='left 1.4s ease-in-out, bottom .5s ease';
+      ch.className='char walk';
+      if(step.charDrink) ch.classList.add('drinking');
+      ch.style.left=(step.charX||15)+'%';
+    })});
+
+    // Phase 3: Character arrives, switch to scene pose, show dialog
+    setTimeout(()=>{
+      ch.className='char '+(step.pose||'idle');
+      if(step.charDrink) ch.classList.add('drinking');
+      buildDialog(step);
+      dlg.style.opacity='1';
+    },1500);
+  },1300);
+}
+
+function finishGame(){
+  const d=$('dialog');
+  d.innerHTML=`
+    <div class="dloc">YOU'RE LOCKED IN</div>
+    <div class="dsp">🎉 QUEST COMPLETE</div>
+    <div class="dtx">Your choices are saved. Here's your info packet:</div>
+    <div class="packet">
+      <div class="packet-title">📦 YOUR WEEKEND PACKET</div>
+      <div class="packet-row"><span class="packet-icon">🏠</span><div><div class="packet-label">The House</div><div class="packet-val">202 15th Avenue, Belmar, NJ 07719</div></div></div>
+      <div class="packet-row"><span class="packet-icon">🔗</span><div><div class="packet-label">Airbnb</div><a class="packet-link" href="https://www.airbnb.com/rooms/1392744599884075499" target="_blank">View the Airbnb →</a></div></div>
+      <div class="packet-row"><span class="packet-icon">📅</span><div><div class="packet-label">Dates</div><div class="packet-val">June 11 – 14, 2026 (Thu – Sun)</div></div></div>
+      <div class="packet-row"><span class="packet-icon">📍</span><div><div class="packet-label">Town</div><div class="packet-val">Belmar, NJ — right in the sweet spot</div></div></div>
+      <div class="packet-row"><span class="packet-icon">⚠️</span><div><div class="packet-label">Key Rule</div><div class="packet-val">Parker House BEFORE 6 PM Friday. Non-negotiable.</div></div></div>
+    </div>
+    <div style="display:flex;gap:.5rem;margin-top:.8rem;flex-wrap:wrap">
+      <button class="nb show" onclick="goScores()">🏆 VIEW SCORES</button>
+      <button class="nb show" style="border-color:var(--dim);color:var(--dim)" onclick="showScreen('titleScreen')">◀ TITLE</button>
+    </div>`;
+  $('char').className='char celebrate';
+  buildScene({scene:'beach',cel:'sun',pose:'celebrate',charX:50});
+}
+
+// ─── CONFETTI ───
+function fireConfetti(){
+  const w=document.createElement('div');w.className='confetti-wrap';document.body.appendChild(w);
+  const colors=['#4fc3f7','#ff6b6b','#ffd700','#b388ff','#f06292','#4dd0e1','#66bb6a'];
+  for(let i=0;i<70;i++){
+    const p=document.createElement('div');p.className='confetti-p';
+    p.style.cssText=`left:${Math.random()*100}%;background:${colors[i%colors.length]};
+      width:${5+Math.random()*7}px;height:${5+Math.random()*7}px;border-radius:${Math.random()>.5?'50%':'2px'};
+      animation-delay:${Math.random()*1.5}s;animation-duration:${2+Math.random()*2}s`;
+    w.appendChild(p);
+  }
+  setTimeout(()=>w.remove(),5000);
+}
+
+// ─── SCORES ───
+async function goScores(){
+  await loadVotes();
+  const voters=Object.keys(allVotes);
+  let html=`<div class="scores-title px">🏆 THE PEOPLE HAVE SPOKEN</div>`;
+  html+=`<div class="scores-sub">${voters.length} response${voters.length!==1?'s':''} so far</div>`;
+
+  for(const[key,meta] of Object.entries(Q_META)){
+    const counts={};const writeins=[];
+    for(const opt of Object.keys(meta.o))counts[opt]=0;
+    for(const voter of voters){
+      const v=allVotes[voter];if(!v||!v[key])continue;
+      const val=v[key];
+      if(key==='days'&&Array.isArray(val)){val.forEach(d=>{if(counts[d]!==undefined)counts[d]++})}
+      else if(typeof val==='string'){if(counts[val]!==undefined)counts[val]++;else if(val&&val!=='_other')writeins.push(val)}
+    }
+    const mx=Math.max(1,...Object.values(counts));
+    html+=`<div class="rcard"><div class="rcard-q">${meta.l}</div>`;
+    for(const[opt,label] of Object.entries(meta.o)){
+      const pct=(counts[opt]/mx)*100;
+      html+=`<div class="rrow"><div class="rrow-label">${label}</div>
+        <div class="rbar-bg"><div class="rbar" style="width:${pct}%"></div></div>
+        <div class="rrow-ct">${counts[opt]}</div></div>`;
+    }
+    if(meta.wi&&writeins.length){
+      html+=`<div class="rwi"><div class="rwi-label">Write-ins</div>`;
+      writeins.forEach(w=>{html+=`<div class="rwi-item">→ ${w}</div>`});
+      html+=`</div>`;
+    }
+    html+=`</div>`;
   }
 
-  con.innerHTML=h;
-  requestAnimationFrame(()=>{document.querySelectorAll('.rbf').forEach(b=>{const w=b.style.width;b.style.width='0%';requestAnimationFrame(()=>{b.style.width=w})})});
+  // Snacks
+  const snacks=[];
+  for(const voter of voters){
+    const v=allVotes[voter];
+    if(v&&v.snacks&&v.snacks!=='none'&&v.snacks.trim())snacks.push(v.snacks);
+  }
+  if(snacks.length){
+    html+=`<div class="snack-section"><div class="snack-title">🍿 SNACK REQUESTS</div>`;
+    snacks.forEach(s=>{html+=`<div class="snack-item">→ ${s}</div>`});
+    html+=`</div>`;
+  }
+
+  html+=`<div class="scores-nav">
+    <button class="nb show" onclick="showScreen('titleScreen')">🎮 PLAY AGAIN</button>
+    <button class="nb show" style="border-color:var(--dim);color:var(--dim)" onclick="showScreen('titleScreen')">◀ TITLE</button>
+  </div>`;
+
+  $('scoresContent').innerHTML=html;
+  showScreen('scoresScreen');
 }
-load();
+
+// ─── QUEST START ───
+async function startQuest(){
+  const inp=$('nameInput');
+  playerName=inp.value.trim();
+  if(!playerName)return;
+  await loadVotes();
+  if(allVotes[playerName])userVote={...allVotes[playerName]};
+  else userVote={};
+  stepIdx=0;selected=null;multiSel.clear();
+  showScreen('gameScreen');
+  const step=STEPS[0];
+  buildScene(step);
+  buildDialog(step);
+  buildPmap();
+  makeStars($('sceneStars'),40);
+}
+
+// ─── INIT ───
+(async function(){
+  await loadVotes();
+  $('nameInput').addEventListener('keydown',e=>{if(e.key==='Enter')startQuest()});
+})();
 </script>
 </body>
 </html>
